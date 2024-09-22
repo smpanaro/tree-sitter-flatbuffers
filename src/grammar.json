@@ -1003,7 +1003,7 @@
     },
     "string_constant": {
       "type": "PATTERN",
-      "value": "\".*?\""
+      "value": "(\"[^\"]*?\"|'[^']*?')"
     },
     "ident": {
       "type": "PATTERN",
@@ -1100,4 +1100,3 @@
   "inline": [],
   "supertypes": []
 }
-

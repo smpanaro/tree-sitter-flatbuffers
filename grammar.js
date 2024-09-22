@@ -189,7 +189,8 @@ module.exports = grammar({
     // file_identifier_decl
     file_identifier: ($) => seq("file_identifier", $.string_constant, ";"),
 
-    string_constant: ($) => /".*?"/,
+    // ' is undocumented but compiles correctly
+    string_constant: ($) => /("[^"]*?"|'[^']*?')/,
 
     ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
