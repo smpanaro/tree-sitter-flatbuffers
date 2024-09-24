@@ -5,6 +5,8 @@
 module.exports = grammar({
   name: "flatbuffers",
 
+  extras: ($) => [$.comment, /\s/],
+
   rules: {
     schema: ($) =>
       repeat(
@@ -13,13 +15,15 @@ module.exports = grammar({
           $.include,
           $.namespace,
           $.attribute,
-          $.table_struct,
-          $.enum_union,
+          $.table,
+          $.struct,
+          $.enum,
+          $.union,
           $.rpc_service,
           $.root_type,
           $.file_extension,
           $.file_identifier,
-          $.object,
+          $.json_object,
         ),
       ),
 
@@ -36,20 +40,16 @@ module.exports = grammar({
 
     // attribute_decl
     attribute: ($) =>
-      seq(
-        "attribute",
-        field("name", choice($.ident, seq('"', $.ident, '"'))),
-        ";",
-      ),
+      seq("attribute", field("name", choice($.ident, $.string_constant)), ";"),
 
     // type_decl
-    table_struct: ($) =>
+    table: ($) =>
       seq(
-        choice("table", "struct"),
+        "table",
         field("name", $.ident),
         optional($.metadata),
         "{",
-        repeat(choice($.table_field, $.comment)),
+        repeat($.table_field),
         "}",
       ),
 
@@ -58,35 +58,97 @@ module.exports = grammar({
       seq(
         field("name", $.ident),
         ":",
-        $.type,
-        optional(
-          field("default", seq("=", choice($.scalar, $.enum_field_name))),
+        choice(
+          seq(
+            choice(alias($._builtin_type, $.type), $.vector_type),
+            optional(
+              field(
+                "default",
+                seq(
+                  "=",
+                  choice($.string_constant, $._scalar, $.vector_constant),
+                ),
+              ),
+            ),
+          ),
+          // enum fields
+          seq(
+            alias($.ident, $.type),
+            optional(field("default", seq("=", $._enum_field_name))),
+          ),
         ),
         optional($.metadata),
-        optional($.comment),
+        ";",
+      ),
+
+    // type_decl
+    // The official grammar combines table and struct but structs can't have default values.
+    struct: ($) =>
+      seq(
+        "struct",
+        field("name", $.ident),
+        optional($.metadata),
+        "{",
+        repeat($.struct_field),
+        "}",
+      ),
+
+    // field_decl
+    struct_field: ($) =>
+      seq(
+        field("name", $.ident),
+        ":",
+        choice(
+          alias($._builtin_type, $.type),
+          alias($.ident, $.type),
+          $.vector_type,
+          $.array_type,
+        ),
+        optional($.metadata),
         ";",
       ),
 
     // enum_decl
-    enum_union: ($) =>
+    enum: ($) =>
       seq(
-        choice(seq("enum", $.ident, ":", $.type), seq("union", $.ident)),
+        "enum",
+        $.ident,
+        ":",
+        $.type,
         optional($.metadata),
         "{",
-        optional(
-          seq(
-            repeat(seq(optional(","), choice($.comment, $.enum_field))), // TODO: leading comma is technically wrong
-            optional(","),
-          ),
-        ),
+        repeat(seq($.enum_field, ",")),
+        optional($.enum_field),
         "}",
       ),
 
     // enumval_decl
     enum_field: ($) =>
-      seq($.enum_field_name, optional(seq("=", $.integer_constant))),
+      seq(
+        field("name", $._enum_field_name),
+        optional(seq("=", $.integer_constant)),
+      ),
 
-    enum_field_name: ($) => $.ident,
+    _enum_field_name: ($) => $.ident,
+
+    // enum_decl
+    // The official grammar combines enums and unions but unions can't have default values.
+    union: ($) =>
+      seq(
+        "union",
+        $.ident,
+        optional($.metadata),
+        "{",
+        repeat(seq($.union_field, ",")),
+        optional($.union_field),
+        "}",
+      ),
+
+    union_field: ($) =>
+      choice(
+        field("typename", $.ident),
+        seq(field("name", $.ident), ":", field("typename", $.ident)),
+      ),
 
     // root_decl
     root_type: ($) => seq("root_type", field("name", $.ident), ";"),
@@ -105,15 +167,15 @@ module.exports = grammar({
       seq(
         field("name", $.ident),
         "(",
-        $.ident,
+        field("request", $.ident),
         ")",
         ":",
-        $.ident,
+        field("response", $.ident),
         optional($.metadata),
         ";",
       ),
 
-    type: ($) =>
+    _builtin_type: ($) =>
       choice(
         "bool",
         "byte",
@@ -137,50 +199,53 @@ module.exports = grammar({
         "float32",
         "float64",
         "string",
-        seq("[", $.type, "]"),
-        $.ident,
       ),
+
+    vector_type: ($) => seq("[", $._vector_element, "]"),
+    _vector_element: ($) => alias(choice($._builtin_type, $.ident), $.type),
+
+    // Separate since currently only structs can have array members.
+    array_type: ($) => seq("[", $._array_element, ":", $.integer_constant, "]"),
+    _array_element: ($) => alias(choice($._builtin_type, $.ident), $.type),
+
+    type: ($) => choice($._builtin_type, $.vector_type, $.ident),
 
     metadata: ($) =>
       seq(
         "(",
         optional(
           seq(
-            seq($.ident, optional(seq(":", $.single_value))),
-            repeat(seq(",", seq($.ident, optional(seq(":", $.single_value))))),
+            seq($.ident, optional(seq(":", $._single_value))),
+            repeat(seq(",", seq($.ident, optional(seq(":", $._single_value))))),
             optional(","),
           ),
         ),
         ")",
       ),
 
-    scalar: ($) =>
+    _scalar: ($) =>
       choice($.boolean_constant, $.integer_constant, $.float_constant),
 
-    object: ($) =>
+    json_object: ($) =>
       seq(
         "{",
-        optional(
-          seq(
-            seq($.ident, ":", $.value),
-            repeat(seq(",", seq($.ident, ":", $.value))),
-            optional(","),
-          ),
-        ),
+        repeat(seq($._object_field, ",")),
+        optional($._object_field),
         "}",
       ),
 
-    single_value: ($) => choice($.scalar, $.string_constant),
+    _object_field: ($) =>
+      seq(field("key", choice($.ident, $.string_constant)), ":", $.value),
 
-    value: ($) =>
-      choice(
-        $.single_value,
-        $.object,
-        seq(
-          "[",
-          optional(seq($.value, repeat(seq(",", $.value)), optional(","))),
-          "]",
-        ),
+    _single_value: ($) => choice($._scalar, $.string_constant),
+
+    value: ($) => choice($._single_value, $.json_object, $.json_array),
+
+    json_array: ($) =>
+      seq(
+        "[",
+        optional(seq($.value, repeat(seq(",", $.value)), optional(","))),
+        "]",
       ),
 
     // file_extension_decl
@@ -191,6 +256,9 @@ module.exports = grammar({
 
     // ' is undocumented but compiles correctly
     string_constant: ($) => /("[^"]*?"|'[^']*?')/,
+
+    // Empty vector is the only allowed constant.
+    vector_constant: ($) => "[]",
 
     ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 

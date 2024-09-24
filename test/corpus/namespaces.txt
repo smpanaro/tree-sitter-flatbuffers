@@ -1,0 +1,24 @@
+=========================
+NAMESPACES: single
+=========================
+
+namespace ns;
+
+----
+
+(schema
+    (namespace (ident))
+)
+
+=========================
+NAMESPACES: dot separated
+=========================
+
+namespace com.foo.ns;
+
+----
+
+(schema
+    (namespace
+        (ident) (ident) (ident))
+)

@@ -1,0 +1,71 @@
+=========================
+SCHEMAS: official example schema
+=========================
+
+// example IDL file
+
+namespace MyGame;
+
+attribute "priority";
+
+enum Color : byte { Red = 1, Green, Blue }
+
+union Any { Monster, Weapon, Pickup }
+
+struct Vec3 {
+  x:float;
+  y:float;
+  z:float;
+}
+
+table Monster {
+  pos:Vec3;
+  mana:short = 150;
+  hp:short = 100;
+  name:string;
+  friendly:bool = false (deprecated, priority: 1);
+  inventory:[ubyte];
+  color:Color = Blue;
+  test:Any;
+}
+
+root_type Monster;
+
+----
+
+(schema
+    (comment)
+    (namespace (ident))
+    (attribute (string_constant))
+
+    (enum (ident) (type)
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident))
+        (enum_field (ident))
+    )
+
+    (union (ident)
+        (union_field (ident))
+        (union_field (ident))
+        (union_field (ident))
+    )
+
+    (struct (ident)
+        (struct_field (ident) (type))
+        (struct_field (ident) (type))
+        (struct_field (ident) (type))
+    )
+
+    (table (ident)
+        (table_field (ident) (type))
+        (table_field (ident) (type) (integer_constant))
+        (table_field (ident) (type) (integer_constant))
+        (table_field (ident) (type))
+        (table_field (ident) (type) (boolean_constant) (metadata (ident) (ident) (integer_constant)))
+        (table_field (ident) (vector_type (type)))
+        (table_field (ident) (type) (ident))
+        (table_field (ident) (type))
+    )
+
+    (root_type (ident))
+)

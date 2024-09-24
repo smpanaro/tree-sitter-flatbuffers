@@ -1,0 +1,24 @@
+=========================
+ATTRIBUTES: bare
+=========================
+
+attribute attr;
+
+----
+
+(schema (attribute (ident)))
+
+=========================
+ATTRIBUTES: strings
+=========================
+
+
+attribute "attr";
+attribute 'rtta';
+
+----
+
+(schema
+    (attribute (string_constant))
+    (attribute (string_constant))
+)

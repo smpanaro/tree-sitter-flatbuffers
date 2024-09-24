@@ -1,0 +1,100 @@
+=========================
+STRUCTS: empty
+=========================
+
+struct StructType {}
+
+----
+
+(schema (struct (ident)))
+
+=========================
+STRUCTS: array
+=========================
+
+struct Vec3 {
+    v: [int: 3];
+}
+
+----
+
+(schema
+    (struct (ident)
+        (struct_field (ident) (array_type (type) (integer_constant)))
+    )
+)
+
+=========================
+STRUCTS: attributes
+=========================
+
+struct StructType (force_align: 8) {}
+
+----
+
+(schema
+    (struct (ident)
+        (metadata (ident) (integer_constant))
+    )
+)
+
+=========================
+STRUCTS: one field
+=========================
+
+struct StructType {
+    a: int;
+}
+
+----
+
+(schema
+    (struct (ident)
+        (struct_field (ident) (type))
+    )
+)
+
+=========================
+STRUCTS: two fields
+=========================
+
+struct StructType {
+    a: int;
+    b: OtherStruct;
+}
+
+----
+
+(schema
+    (struct (ident)
+        (struct_field (ident) (type))
+        (struct_field (ident) (type))
+    )
+)
+
+=========================
+STRUCTS: field attributes
+=========================
+
+struct StructType {
+    a: uint32 (hash);
+}
+
+----
+
+(schema
+    (struct (ident)
+        (struct_field (ident) (type) (metadata (ident)))
+    )
+)
+
+=========================
+STRUCTS: no defaults
+:error
+=========================
+
+struct StructType {
+    a: int = 3;
+}
+
+----

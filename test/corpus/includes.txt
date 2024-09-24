@@ -1,0 +1,13 @@
+=========================
+INCLUDES: strings
+=========================
+
+include "foo/bar/baz.fbs";
+include 'foo/bar/baz.fbs';
+
+----
+
+(schema
+    (include (string_constant))
+    (include (string_constant))
+)

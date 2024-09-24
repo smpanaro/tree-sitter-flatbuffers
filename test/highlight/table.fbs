@@ -1,0 +1,26 @@
+table Monster {
+// <- keyword
+//    ^ type
+  pos:Vec3;
+//    ^ type
+  mana:short = 150;
+//     ^ type
+//             ^ number
+  hp:short = 100;
+//   ^ type
+//           ^ number
+  name:string;
+//     ^ type
+  friendly:bool = false (deprecated, priority: 1);
+//         ^ type
+//                ^ boolean
+//                       ^ attribute
+//                                   ^ attribute
+//                                             ^ number
+  inventory:[ubyte];
+//           ^ type
+  color:Color = Blue;
+//      ^ type
+  test:Any;
+//     ^ type
+}

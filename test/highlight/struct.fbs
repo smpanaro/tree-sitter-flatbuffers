@@ -1,0 +1,10 @@
+struct Vec3 {
+// <- keyword
+//      ^ type
+    xyz: [int: 3];
+//       ^ punctuation.bracket
+//         ^ type
+//             ^ number
+    origin: int;
+//          ^ type
+}

@@ -1,0 +1,188 @@
+=========================
+TABLES: empty
+=========================
+
+table TableType {}
+
+----
+
+(schema (table (ident)))
+
+=========================
+TABLES: attribute
+=========================
+
+table TableType (original_order) {}
+
+----
+
+(schema
+    (table (ident) (metadata (ident)))
+)
+
+=========================
+TABLES: missing ;
+:error
+=========================
+
+table TableType {
+    a: int
+}
+
+----
+
+=========================
+TABLES: single field
+=========================
+
+table TableType {
+    a: int;
+}
+
+----
+
+(schema
+    (table (ident)
+        (table_field (ident) (type))
+    )
+)
+
+=========================
+TABLES: multi field
+=========================
+
+table TableType {
+    a: int;
+    b: short;
+}
+
+----
+
+(schema
+    (table (ident)
+        (table_field (ident) (type))
+        (table_field (ident) (type))
+    )
+)
+
+=========================
+TABLES: default builtins
+=========================
+
+table TableType {
+    a: int = 3;
+    b: bool = true;
+    c: float = 3.14;
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) default: (integer_constant))
+        (table_field name: (ident) (type) default: (boolean_constant))
+        (table_field name: (ident) (type) default: (float_constant))
+    )
+)
+
+=========================
+TABLES: default enum
+=========================
+
+table TableType {
+    a: EnumType = Foo;
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) default: (ident))
+    )
+)
+
+=========================
+TABLES: default string
+=========================
+
+table TableType {
+    a: string = '';
+    b: string = "";
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) default: (string_constant))
+        (table_field name: (ident) (type) default: (string_constant))
+    )
+)
+
+=========================
+TABLES: default vector
+=========================
+
+table TableType {
+    a: [int] = [];
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (vector_type (type)) default: (vector_constant))
+    )
+)
+
+
+=========================
+TABLES: field single attribute
+=========================
+
+table TableType {
+    a: int (deprecated);
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) (metadata (ident)))
+    )
+)
+
+
+=========================
+TABLES: field multiple attributes
+=========================
+
+table TableType {
+    a: int (deprecated, id: 1);
+    b: int (id: 2, deprecated);
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) (metadata (ident) (ident) (integer_constant)))
+        (table_field name: (ident) (type) (metadata (ident) (integer_constant) (ident)))
+    )
+)
+
+=========================
+TABLES: field attribute and default
+=========================
+
+table TableType {
+    a: int = 3 (deprecated);
+}
+
+----
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident) (type) default: (integer_constant) (metadata (ident)))
+    )
+)

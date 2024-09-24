@@ -1,0 +1,58 @@
+=========================
+RPCS: empty, a method must be provided
+:error
+=========================
+
+rpc_service ServiceType {}
+
+----
+
+=========================
+RPCS: one method
+=========================
+
+rpc_service ServiceType {
+  Read(RequestTable):ResponseTable;
+}
+
+----
+
+(schema
+    (rpc_service name: (ident)
+        (rpc_method name: (ident) request: (ident) response: (ident))
+    )
+)
+
+=========================
+RPCS: two methods
+=========================
+
+rpc_service ServiceType {
+  Read(ReadRequestTable):ReadResponseTable;
+  Create(CreateRequestTable):CreateResponseTable;
+}
+
+----
+
+(schema
+    (rpc_service name: (ident)
+        (rpc_method name: (ident) request: (ident) response: (ident))
+        (rpc_method name: (ident) request: (ident) response: (ident))
+    )
+)
+
+=========================
+RPCS: method attribute
+=========================
+
+rpc_service ServiceType {
+  Read(ReadRequestTable):ReadResponseTable (custom_attribute);
+}
+
+----
+
+(schema
+    (rpc_service name: (ident)
+        (rpc_method name: (ident) request: (ident) response: (ident) (metadata (ident)))
+    )
+)

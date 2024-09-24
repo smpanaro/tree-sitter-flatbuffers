@@ -1,0 +1,101 @@
+=========================
+UNIONS: empty
+=========================
+
+union UnionType {}
+
+----
+
+(schema (union (ident)))
+
+
+=========================
+UNIONS: one member
+=========================
+
+union UnionType { TableOne }
+
+----
+
+(schema
+    (union (ident)
+        (union_field typename: (ident))
+    )
+)
+
+=========================
+UNIONS: one member, comma
+=========================
+
+union UnionType { TableOne, }
+
+----
+
+(schema
+    (union (ident)
+        (union_field typename: (ident))
+    )
+)
+
+=========================
+UNIONS: two members
+=========================
+
+union UnionType { TableOne, TableTwo, }
+
+----
+
+(schema
+    (union (ident)
+        (union_field (ident))
+        (union_field (ident))
+    )
+)
+
+=========================
+UNIONS: named members
+=========================
+
+union UnionType {
+    one: TableOne,
+    two: TableTwo,
+}
+
+----
+
+(schema
+    (union (ident)
+        (union_field
+            name: (ident)
+            typename: (ident))
+        (union_field
+            name: (ident)
+            typename: (ident))
+    )
+)
+
+=========================
+UNIONS: comments
+=========================
+
+union UnionType { A, /* comment one */ b: B,
+    // comment two
+    // comment three
+    C, // comment four
+ }
+
+----
+
+(schema
+    (union (ident)
+        (union_field typename: (ident))
+        (comment)
+        (union_field
+            name: (ident)
+            typename: (ident))
+        (comment)
+        (comment)
+        (union_field typename: (ident))
+        (comment)
+    )
+)

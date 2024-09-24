@@ -1,0 +1,46 @@
+==========================
+FILE ATTRIBUTES: extension
+==========================
+
+file_extension 'single';
+file_extension "double";
+file_extension "";
+file_extension '';
+
+----
+
+(schema
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+)
+
+==========================
+FILE ATTRIBUTES: identifier
+==========================
+
+file_identifier 'single';
+file_identifier "double";
+file_identifier "";
+file_identifier '';
+
+----
+
+(schema
+    (file_identifier (string_constant))
+    (file_identifier (string_constant))
+    (file_identifier (string_constant))
+    (file_identifier (string_constant))
+)
+
+
+==========================
+FILE ATTRIBUTES: root table
+==========================
+
+root_type Foo;
+
+----
+
+(schema (root_type (ident)))

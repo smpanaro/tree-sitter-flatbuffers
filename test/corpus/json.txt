@@ -1,0 +1,68 @@
+=========================
+OBJECTS: empty
+=========================
+
+{}
+
+----
+
+(schema
+    (json_object)
+)
+
+=========================
+OBJECTS: quoted or unquoted keys
+=========================
+
+{
+    "k1": 3,
+    k2: "foo",
+}
+
+----
+
+(schema
+    (json_object
+        key: (string_constant) (value (integer_constant))
+        key: (ident) (value (string_constant))
+    )
+)
+
+=========================
+OBJECTS: array fields
+=========================
+
+{
+    k1: [1,2,3],
+    k1: ["s"],
+}
+
+----
+
+(schema
+    (json_object
+        key: (ident) (value (json_array (value (integer_constant)) (value (integer_constant)) (value (integer_constant))))
+        key: (ident) (value (json_array (value (string_constant))))
+    )
+)
+
+=========================
+OBJECTS: array of object fields
+=========================
+
+{
+    k1: [{a: 1}, {a: 2}],
+}
+
+----
+
+(schema
+    (json_object
+        key: (ident) (value
+            (json_array
+                (value (json_object key: (ident) (value (integer_constant))))
+                (value (json_object key: (ident) (value (integer_constant))))
+            )
+        )
+    )
+)

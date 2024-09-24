@@ -1,0 +1,103 @@
+=========================
+LITERALS: string literals
+=========================
+
+file_extension "string";
+file_extension 'string';
+file_extension '';
+file_extension "";
+
+----
+
+(schema
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+    (file_extension (string_constant))
+)
+
+=========================
+LITERALS: int literals
+=========================
+
+enum IntLiterals : int {
+    A = +1,
+    B = 0,
+    C = -20,
+    D = 0xc0F,
+    E = 0xf33,
+    F = -0xc0F,
+    G = -0xf33,
+    H = +0xc0F,
+    I = +0xf33,
+}
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident) (integer_constant))
+    )
+)
+
+=========================
+LITERALS: float literals
+=========================
+
+table FloatLiterals {
+  a: float = 3.14;
+  b: float = -2.718;
+  c: float = +0.577;
+  d: float = 1.23e-4;
+  e: float = -5.67E+8;
+  f: float = 0xA.Bp3;
+  g: float = -0x1.5p-2;
+  h: float = nan;
+  i: float = +inf;
+  j: float = -infinity;
+}
+
+----
+
+(schema
+  (table
+    (ident)
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+    (table_field (ident) (type) (float_constant))
+  )
+)
+
+=========================
+LITERALS: boolean literals
+=========================
+
+table BooleanLiterals {
+  a: bool = true;
+  b: bool = false;
+}
+
+----
+
+(schema
+  (table
+    (ident)
+    (table_field (ident) (type) (boolean_constant))
+    (table_field (ident) (type) (boolean_constant))
+  )
+)

@@ -1,0 +1,188 @@
+=========================
+ENUMS: empty
+=========================
+
+enum EnumType : int {}
+
+----
+
+(schema
+    (enum (ident) (type))
+)
+
+=========================
+ENUMS: missing type
+:error
+=========================
+
+enum EnumType {}
+
+----
+
+=========================
+ENUMS: single
+=========================
+
+enum EnumType : byte { A }
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident))
+    )
+)
+
+=========================
+ENUMS: single comma
+=========================
+
+enum EnumType : short { A, }
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident))
+    )
+)
+
+=========================
+ENUMS: default values
+=========================
+
+enum EnumType : short {
+    A = 3,
+    B,
+    C = 0xc,
+}
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident) (integer_constant))
+        (enum_field (ident))
+        (enum_field (ident) (integer_constant))
+    )
+)
+
+=========================
+ENUMS: attributes
+=========================
+
+enum EnumType : ushort (bit_fields) { A, B, C }
+
+----
+
+(schema
+    (enum (ident) (type) (metadata (ident))
+        (enum_field (ident))
+        (enum_field (ident))
+        (enum_field (ident))
+    )
+)
+
+=========================
+ENUMS: comments
+=========================
+
+enum EnumType : ushort { A, /* comment one */ B,
+    // comment two
+    // comment three
+    C, // comment four
+ }
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident))
+        (comment)
+        (enum_field (ident))
+        (comment)
+        (comment)
+        (enum_field (ident))
+        (comment)
+    )
+)
+
+=========================
+ENUMS: leading comment
+=========================
+
+enum EnumType : ushort {
+    // comment
+    A,
+ }
+
+enum EnumType2 : ushort {
+    // comment
+    // comment
+    A,
+ }
+
+----
+
+(schema
+    (enum (ident) (type)
+        (comment)
+        (enum_field (ident))
+    )
+    (enum (ident) (type)
+        (comment)
+        (comment)
+        (enum_field (ident))
+    )
+)
+
+=========================
+ENUMS: final comment
+=========================
+
+enum EnumType : ushort {
+    A,
+    // comment
+ }
+
+enum EnumType2 : ushort {
+    A
+    // comment
+ }
+
+enum EnumType3 : ushort {
+    A
+    // comment
+    // comment
+ }
+
+----
+
+(schema
+    (enum (ident) (type)
+        (enum_field (ident))
+        (comment)
+    )
+    (enum (ident) (type)
+        (enum_field (ident))
+        (comment)
+    )
+    (enum (ident) (type)
+        (enum_field (ident))
+        (comment)
+        (comment)
+    )
+)
+
+
+=========================
+ENUMS: leading comma
+:error
+=========================
+
+enum EnumType : ushort {
+    ,
+    A
+}
+
+----
