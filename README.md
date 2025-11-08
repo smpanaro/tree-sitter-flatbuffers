@@ -4,7 +4,7 @@
 # Development
 Install the tree-sitter CLI:
 - [official docs](https://tree-sitter.github.io/tree-sitter/creating-parsers#dependencies)
-- `brew install tree-sitter`
+- `brew install tree-sitter-cli`
 
 ```shell
 # Edit the grammar
