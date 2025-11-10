@@ -10,10 +10,10 @@ file_extension '';
 ----
 
 (schema
-    (file_extension (string_constant))
-    (file_extension (string_constant))
-    (file_extension (string_constant))
-    (file_extension (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
 )
 
 ==========================
@@ -28,10 +28,10 @@ file_identifier '';
 ----
 
 (schema
-    (file_identifier (string_constant))
-    (file_identifier (string_constant))
-    (file_identifier (string_constant))
-    (file_identifier (string_constant))
+    (file_identifier name: (string_constant))
+    (file_identifier name: (string_constant))
+    (file_identifier name: (string_constant))
+    (file_identifier name: (string_constant))
 )
 
 
@@ -43,4 +43,4 @@ root_type Foo;
 
 ----
 
-(schema (root_type (ident)))
+(schema (root_type type: (ident)))

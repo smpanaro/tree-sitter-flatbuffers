@@ -7,7 +7,7 @@ namespace ns;
 ----
 
 (schema
-    (namespace (ident))
+    (namespace name: (ident))
 )
 
 =========================
@@ -20,5 +20,89 @@ namespace com.foo.ns;
 
 (schema
     (namespace
-        (ident) (ident) (ident))
+        name: (ident) name: (ident) name: (ident))
+)
+
+=========================
+NAMESPACES: table fields
+=========================
+
+table Foo {
+    one: com.two.One;
+    two: One;
+    vone: [com.tree.Two];
+    vtwo: [One];
+}
+
+---
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (qualified_ident
+                scope: (ident)
+                name: (qualified_ident
+                    scope: (ident)
+                    name: (ident)
+                )
+            )
+        )
+        (table_field name: (ident)
+            type: (ident)
+        )
+        (table_field name: (ident)
+            type: (vector_type
+                element: (qualified_ident
+                    scope: (ident)
+                    name: (qualified_ident
+                        scope: (ident)
+                        name: (ident)
+                    )
+                )
+            )
+        )
+        (table_field name: (ident)
+            type: (vector_type element: (ident))
+        )
+    )
+)
+
+=========================
+NAMESPACES: union members
+=========================
+
+union UnionType { com.foo.TableOne, com.TableTwo, }
+
+----
+
+(schema
+    (union name: (ident)
+        (union_field
+            type: (qualified_ident
+                scope: (ident)
+                name: (qualified_ident
+                    scope: (ident)
+                    name: (ident))))
+        (union_field
+            type: (qualified_ident
+                scope: (ident)
+                name: (ident)))
+    )
+)
+
+=========================
+NAMESPACES: defaults
+=========================
+table TableType {
+    a: EnumType = ns.Foo;
+}
+
+---
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (ident)
+            default: (qualified_ident scope: (ident) name: (ident)))
+    )
 )

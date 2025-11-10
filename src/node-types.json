@@ -8,96 +8,16 @@
         "required": true,
         "types": [
           {
-            "type": "bool",
-            "named": false
-          },
-          {
-            "type": "byte",
-            "named": false
-          },
-          {
-            "type": "double",
-            "named": false
-          },
-          {
-            "type": "float",
-            "named": false
-          },
-          {
-            "type": "float32",
-            "named": false
-          },
-          {
-            "type": "float64",
-            "named": false
-          },
-          {
-            "type": "int",
-            "named": false
-          },
-          {
-            "type": "int16",
-            "named": false
-          },
-          {
-            "type": "int32",
-            "named": false
-          },
-          {
-            "type": "int64",
-            "named": false
-          },
-          {
-            "type": "int8",
-            "named": false
-          },
-          {
-            "type": "long",
-            "named": false
+            "type": "ident",
+            "named": true
           },
           {
             "type": "qualified_ident",
             "named": true
           },
           {
-            "type": "short",
-            "named": false
-          },
-          {
-            "type": "string",
-            "named": false
-          },
-          {
-            "type": "ubyte",
-            "named": false
-          },
-          {
-            "type": "uint",
-            "named": false
-          },
-          {
-            "type": "uint16",
-            "named": false
-          },
-          {
-            "type": "uint32",
-            "named": false
-          },
-          {
-            "type": "uint64",
-            "named": false
-          },
-          {
-            "type": "uint8",
-            "named": false
-          },
-          {
-            "type": "ulong",
-            "named": false
-          },
-          {
-            "type": "ushort",
-            "named": false
+            "type": "scalar_type",
+            "named": true
           }
         ]
       },
@@ -124,6 +44,24 @@
           {
             "type": "ident",
             "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "boolean_constant",
+            "named": true
+          },
+          {
+            "type": "float_constant",
+            "named": true
+          },
+          {
+            "type": "integer_constant",
+            "named": true
           },
           {
             "type": "string_constant",
@@ -145,6 +83,26 @@
     "fields": {}
   },
   {
+    "type": "custom_attribute",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "enum",
     "named": true,
     "fields": {
@@ -163,7 +121,23 @@
         "required": true,
         "types": [
           {
-            "type": "type",
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
             "named": true
           }
         ]
@@ -223,31 +197,33 @@
   {
     "type": "file_extension",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "file_identifier",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -258,16 +234,17 @@
   {
     "type": "include",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -329,48 +306,10 @@
       "required": false,
       "types": [
         {
-          "type": "metadata_assignment",
+          "type": "attribute",
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "metadata_assignment",
-    "named": true,
-    "fields": {
-      "key": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      },
-      "value": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "boolean_constant",
-            "named": true
-          },
-          {
-            "type": "float_constant",
-            "named": true
-          },
-          {
-            "type": "integer_constant",
-            "named": true
-          },
-          {
-            "type": "string_constant",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -404,19 +343,23 @@
           {
             "type": "ident",
             "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
           }
         ]
       },
-      "namespace": {
-        "multiple": true,
-        "required": false,
+      "scope": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": ".",
-            "named": false
+            "type": "ident",
+            "named": true
           },
           {
-            "type": "ident",
+            "type": "qualified_ident",
             "named": true
           }
         ]
@@ -431,6 +374,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
           {
             "type": "qualified_ident",
             "named": true
@@ -458,6 +405,10 @@
         "required": true,
         "types": [
           {
+            "type": "ident",
+            "named": true
+          },
+          {
             "type": "qualified_ident",
             "named": true
           }
@@ -467,6 +418,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
           {
             "type": "qualified_ident",
             "named": true
@@ -514,17 +469,7 @@
   {
     "type": "scalar_type",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "qualified_ident",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "schema",
@@ -536,7 +481,7 @@
       "required": false,
       "types": [
         {
-          "type": "attribute",
+          "type": "custom_attribute",
           "named": true
         },
         {
@@ -635,7 +580,23 @@
         "required": true,
         "types": [
           {
-            "type": "type",
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
             "named": true
           }
         ]
@@ -703,11 +664,19 @@
             "named": true
           },
           {
+            "type": "ident",
+            "named": true
+          },
+          {
             "type": "integer_constant",
             "named": true
           },
           {
             "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "string_constant",
             "named": true
           },
           {
@@ -731,7 +700,23 @@
         "required": true,
         "types": [
           {
-            "type": "type",
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
             "named": true
           }
         ]
@@ -743,29 +728,6 @@
       "types": [
         {
           "type": "metadata",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "array_type",
-          "named": true
-        },
-        {
-          "type": "scalar_type",
-          "named": true
-        },
-        {
-          "type": "vector_type",
           "named": true
         }
       ]
@@ -815,10 +777,14 @@
           }
         ]
       },
-      "typename": {
+      "type": {
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
           {
             "type": "qualified_ident",
             "named": true
@@ -871,96 +837,16 @@
         "required": true,
         "types": [
           {
-            "type": "bool",
-            "named": false
-          },
-          {
-            "type": "byte",
-            "named": false
-          },
-          {
-            "type": "double",
-            "named": false
-          },
-          {
-            "type": "float",
-            "named": false
-          },
-          {
-            "type": "float32",
-            "named": false
-          },
-          {
-            "type": "float64",
-            "named": false
-          },
-          {
-            "type": "int",
-            "named": false
-          },
-          {
-            "type": "int16",
-            "named": false
-          },
-          {
-            "type": "int32",
-            "named": false
-          },
-          {
-            "type": "int64",
-            "named": false
-          },
-          {
-            "type": "int8",
-            "named": false
-          },
-          {
-            "type": "long",
-            "named": false
+            "type": "ident",
+            "named": true
           },
           {
             "type": "qualified_ident",
             "named": true
           },
           {
-            "type": "short",
-            "named": false
-          },
-          {
-            "type": "string",
-            "named": false
-          },
-          {
-            "type": "ubyte",
-            "named": false
-          },
-          {
-            "type": "uint",
-            "named": false
-          },
-          {
-            "type": "uint16",
-            "named": false
-          },
-          {
-            "type": "uint32",
-            "named": false
-          },
-          {
-            "type": "uint64",
-            "named": false
-          },
-          {
-            "type": "uint8",
-            "named": false
-          },
-          {
-            "type": "ulong",
-            "named": false
-          },
-          {
-            "type": "ushort",
-            "named": false
+            "type": "scalar_type",
+            "named": true
           }
         ]
       }

@@ -6,7 +6,7 @@ attribute attr;
 
 ----
 
-(schema (attribute (ident)))
+(schema (custom_attribute name: (ident)))
 
 =========================
 ATTRIBUTES: strings
@@ -19,6 +19,6 @@ attribute 'rtta';
 ----
 
 (schema
-    (attribute (string_constant))
-    (attribute (string_constant))
+    (custom_attribute name: (string_constant))
+    (custom_attribute name: (string_constant))
 )

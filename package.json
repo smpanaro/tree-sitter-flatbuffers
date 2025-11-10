@@ -36,15 +36,5 @@
     "queries/*",
     "src/**",
     "*.wasm"
-  ],
-  "tree-sitter": [
-    {
-      "scope": "source.flatbuffers",
-      "file-types": [
-        "fbs"
-      ],
-      "injection-regex": "^flatbuffers$",
-      "highlights": "queries/highlights.scm"
-    }
   ]
 }

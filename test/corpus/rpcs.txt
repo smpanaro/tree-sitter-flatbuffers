@@ -53,6 +53,43 @@ rpc_service ServiceType {
 
 (schema
     (rpc_service name: (ident)
-        (rpc_method name: (ident) request: (ident) response: (ident) (metadata (ident)))
+        (rpc_method name: (ident) request: (ident) response: (ident) (metadata (attribute name: (ident))))
+    )
+)
+
+=========================
+RPCS: official test
+=========================
+// https://github.com/google/flatbuffers/blob/807adb73b20f0afd1cfe92c576339ac8d21592a7/tests/service_test.fbs
+
+namespace example;
+
+table HelloRequest {}
+table HelloResponse {}
+
+rpc_service HelloService {
+  Hello(HelloRequest):HelloResponse;
+  StreamClient(HelloRequest):HelloResponse (streaming: "client");
+  StreamServer(HelloRequest):HelloResponse (streaming: "server");
+  Stream(HelloRequest):HelloResponse (streaming: "bidi");
+}
+
+---
+
+(schema
+    (comment)
+    (namespace name: (ident))
+
+    (table name: (ident))
+    (table name: (ident))
+
+    (rpc_service name: (ident)
+        (rpc_method name: (ident) request: (ident) response: (ident))
+        (rpc_method name: (ident) request: (ident) response: (ident)
+            (metadata (attribute name: (ident) value: (string_constant))))
+        (rpc_method name: (ident) request: (ident) response: (ident)
+            (metadata (attribute name: (ident) value: (string_constant))))
+        (rpc_method name: (ident) request: (ident) response: (ident)
+            (metadata (attribute name: (ident) value: (string_constant))))
     )
 )

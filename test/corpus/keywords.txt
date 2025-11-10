@@ -1,0 +1,57 @@
+=========================
+KEYWORDS: in non-keyword places
+=========================
+// https://github.com/google/flatbuffers/blob/599847236c35fa3802ea4e46e20e93a55d3a4a94/tests/keyword_test.fbs#L14
+
+namespace KeywordTest;
+
+enum ABC: int { void, where, stackalloc }
+
+enum public: int { }
+
+table KeywordsInTable {
+  is: ABC = void;
+  private: public;
+  type: int;
+  default: bool = false;
+}
+
+union KeywordsInUnion {
+  static: KeywordsInTable,
+  internal: KeywordsInTable,
+}
+
+table Table2 {
+  type: KeywordsInUnion;
+}
+
+---
+
+(schema
+    (comment)
+    (namespace name: (ident))
+
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+    )
+
+    (enum name: (ident) type: (scalar_type))
+
+    (table name: (ident)
+        (table_field name: (ident) type: (ident) default: (ident))
+        (table_field name: (ident) type: (ident))
+        (table_field name: (ident) type: (scalar_type))
+        (table_field name: (ident) type: (scalar_type) default: (boolean_constant))
+    )
+
+    (union name: (ident)
+        (union_field alias: (ident) type: (ident))
+        (union_field alias: (ident) type: (ident))
+    )
+
+    (table name: (ident)
+        (table_field name: (ident) type: (ident))
+    )
+)

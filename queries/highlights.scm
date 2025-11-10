@@ -3,7 +3,7 @@
 ["namespace" "include" "attribute" "table" "struct" "enum" "union" "root_type" "rpc_service"] @keyword
 
 ; Types
-(type) @type
+(scalar_type) @type
 
 ; Constants
 (boolean_constant) @boolean
@@ -24,26 +24,28 @@
 "=" @operator
 
 ; Attributes
-(attribute (ident) @attribute)
-(metadata (ident) @attribute)
+(custom_attribute name: (ident) @attribute)
+(attribute name: (ident) @attribute)
 
 ; Tables/Structs
 (table (ident) @type)
 (table_field
-  (ident) @field
-  (type) @type)
+  name: (ident) @field
+  type: (ident) @type)
 
 (struct (ident) @type)
 (struct_field
-  (ident) @field
-  (type) @type)
+  name: (ident) @field
+  type: (ident) @type)
 
 ; Enums/Unions
-(enum (ident) @type)
+(enum name: (ident) @type)
 (enum_field name: (ident) @variant)
 
-(union (ident) @type)
-(union_field typename: (ident) @type)
+(union name: (ident) @type)
+(union_field
+    alias: (ident) @variant
+    type: (ident) @type)
 
 ; RPCs
 (rpc_service (ident) @type)

@@ -6,7 +6,7 @@ table TableType {}
 
 ----
 
-(schema (table (ident)))
+(schema (table name: (ident)))
 
 =========================
 TABLES: attribute
@@ -17,7 +17,7 @@ table TableType (original_order) {}
 ----
 
 (schema
-    (table (ident) (metadata (ident)))
+    (table name: (ident) (metadata (attribute name: (ident))))
 )
 
 =========================
@@ -42,8 +42,8 @@ table TableType {
 ----
 
 (schema
-    (table (ident)
-        (table_field (ident) (type))
+    (table name: (ident)
+        (table_field name: (ident) type: (scalar_type))
     )
 )
 
@@ -59,9 +59,9 @@ table TableType {
 ----
 
 (schema
-    (table (ident)
-        (table_field (ident) (type))
-        (table_field (ident) (type))
+    (table name: (ident)
+        (table_field name: (ident) type: (scalar_type))
+        (table_field name: (ident) type: (scalar_type))
     )
 )
 
@@ -79,9 +79,9 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) default: (integer_constant))
-        (table_field name: (ident) (type) default: (boolean_constant))
-        (table_field name: (ident) (type) default: (float_constant))
+        (table_field name: (ident) type: (scalar_type) default: (integer_constant))
+        (table_field name: (ident) type: (scalar_type) default: (boolean_constant))
+        (table_field name: (ident) type: (scalar_type) default: (float_constant))
     )
 )
 
@@ -97,7 +97,9 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) default: (ident))
+        (table_field name: (ident)
+            type: (ident)
+            default: (ident))
     )
 )
 
@@ -114,8 +116,8 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) default: (string_constant))
-        (table_field name: (ident) (type) default: (string_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
     )
 )
 
@@ -131,7 +133,9 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (vector_type (type)) default: (vector_constant))
+        (table_field name: (ident)
+            type: (vector_type element: (scalar_type))
+            default: (vector_constant))
     )
 )
 
@@ -148,7 +152,7 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) (metadata (ident)))
+        (table_field name: (ident) type: (scalar_type) (metadata (attribute name: (ident))))
     )
 )
 
@@ -166,8 +170,16 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) (metadata (ident) (ident) (integer_constant)))
-        (table_field name: (ident) (type) (metadata (ident) (integer_constant) (ident)))
+        (table_field name: (ident)
+            type: (scalar_type)
+            (metadata
+                (attribute name: (ident))
+                (attribute name: (ident) value: (integer_constant))))
+        (table_field name: (ident)
+            type: (scalar_type)
+            (metadata
+                (attribute name: (ident) value: (integer_constant))
+                (attribute name: (ident))))
     )
 )
 
@@ -183,6 +195,10 @@ table TableType {
 
 (schema
     (table name: (ident)
-        (table_field name: (ident) (type) default: (integer_constant) (metadata (ident)))
+        (table_field
+            name: (ident)
+            type: (scalar_type)
+            default: (integer_constant)
+                (metadata (attribute name: (ident))))
     )
 )

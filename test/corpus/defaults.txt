@@ -1,0 +1,16 @@
+=========================
+DEFAULTS: official test
+=========================
+// https://github.com/google/flatbuffers/blob/807adb73b20f0afd1cfe92c576339ac8d21592a7/tests/more_defaults.fbs
+
+enum ABC: int { A, B, C }
+
+
+table MoreDefaults {
+  ints: [int] = [];
+  floats: [float] = [     ];
+  empty_string: string = "";
+  some_string: string = "some";
+  abcs: [ABC] = [];
+  bools: [bool] = [];
+}

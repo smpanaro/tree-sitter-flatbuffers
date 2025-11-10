@@ -15,7 +15,7 @@ module.exports = grammar({
         choice(
           $.include,
           $.namespace,
-          $.attribute,
+          $.custom_attribute,
           $.table,
           $.struct,
           $.enum,
@@ -29,18 +29,20 @@ module.exports = grammar({
       ),
 
     // Declarations
-    include: ($) => seq("include", $.string_constant, ";"),
+    include: ($) => seq("include", field("path", $.string_constant), ";"),
     namespace: ($) =>
       seq(
         "namespace",
         field("name", seq($.ident, repeat(seq(".", $.ident)))),
         ";",
       ),
-    attribute: ($) =>
+    custom_attribute: ($) =>
       seq("attribute", field("name", choice($.ident, $.string_constant)), ";"),
-    file_extension: ($) => seq("file_extension", $.string_constant, ";"),
-    file_identifier: ($) => seq("file_identifier", $.string_constant, ";"),
-    root_type: ($) => seq("root_type", field("type", $.qualified_ident), ";"),
+    file_extension: ($) =>
+      seq("file_extension", field("name", $.string_constant), ";"),
+    file_identifier: ($) =>
+      seq("file_identifier", field("name", $.string_constant), ";"),
+    root_type: ($) => seq("root_type", field("type", $._type_ident), ";"),
 
     // Object Declarations
     table: ($) =>
@@ -68,7 +70,7 @@ module.exports = grammar({
         "enum",
         field("name", $.ident),
         ":",
-        field("type", $.type),
+        field("type", $._type),
         optional($.metadata),
         "{",
         commaSep($.enum_field),
@@ -99,11 +101,11 @@ module.exports = grammar({
       seq(
         field("name", $.ident),
         ":",
-        field("type", $.type),
+        field("type", $._type),
         optional(
           field(
             "default",
-            seq("=", choice($._scalar, $.qualified_ident, $.vector_constant)),
+            seq("=", choice($._single_value, $._type_ident, $.vector_constant)),
           ),
         ),
         optional($.metadata),
@@ -114,7 +116,7 @@ module.exports = grammar({
       seq(
         field("name", $.ident),
         ":",
-        field("type", $.type),
+        field("type", $._type),
         optional($.metadata),
         ";",
       ),
@@ -129,31 +131,33 @@ module.exports = grammar({
     union_field: ($) =>
       seq(
         optional(seq(field("alias", $.ident), ":")),
-        field("typename", $.qualified_ident),
+        field("type", $._type_ident),
       ),
 
     rpc_method: ($) =>
       seq(
         field("name", $.ident),
         "(",
-        field("request", $.qualified_ident),
+        field("request", $._type_ident),
         ")",
         ":",
-        field("response", $.qualified_ident),
+        field("response", $._type_ident),
         optional($.metadata),
         ";",
       ),
 
     // Type System
-    _type_reference: ($) => choice($._builtin_type, $.qualified_ident),
+    _type_reference: ($) => choice($.scalar_type, $._type_ident),
 
-    type: ($) =>
+    _type: ($) =>
       choice(
-        alias($._type_reference, $.scalar_type),
+        // alias($._type_reference, $.scalar_type), // TODO: needed?
+        $._type_reference,
         $.vector_type,
         $.array_type,
       ),
 
+    // TODO: Could this handle scalar_type better?
     vector_type: ($) => seq("[", field("element", $._type_reference), "]"),
 
     array_type: ($) =>
@@ -165,7 +169,7 @@ module.exports = grammar({
         "]",
       ),
 
-    _builtin_type: ($) =>
+    scalar_type: ($) =>
       choice(
         "bool",
         "byte",
@@ -192,11 +196,11 @@ module.exports = grammar({
       ),
 
     // Metadata
-    metadata: ($) => seq("(", commaSep($.metadata_assignment), ")"),
+    metadata: ($) => seq("(", commaSep($.attribute), ")"),
 
-    metadata_assignment: ($) =>
+    attribute: ($) =>
       seq(
-        field("key", $.ident),
+        field("name", $.ident),
         optional(seq(":", field("value", $._single_value))),
       ),
 
@@ -216,11 +220,18 @@ module.exports = grammar({
     // Terminals
     ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
+    _dot_scope_resolution: ($) =>
+      prec(1, seq(field("scope", choice($.ident, $.qualified_ident)), ".")),
+
     qualified_ident: ($) =>
       seq(
-        field("namespace", repeat(seq($.ident, "."))),
-        field("name", $.ident),
+        $._dot_scope_resolution,
+        field("name", choice($.qualified_ident, $.ident)),
       ),
+
+    // Helper: any place that accepts a type name can take either a single
+    // ident or a qualified_ident.
+    _type_ident: ($) => choice($.qualified_ident, $.ident),
 
     string_constant: ($) => /("[^"]*?"|'[^']*?')/,
     integer_constant: ($) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
@@ -228,7 +239,7 @@ module.exports = grammar({
       choice(
         /[-+]?(([.][0-9]+)|([0-9]+[.][0-9]*)|([0-9]+))([eE][-+]?[0-9]+)?/,
         /[-+]?0[xX](([.][0-9a-fA-F]+)|([0-9a-fA-F]+[.][0-9a-fA-F]*)|([0-9a-fA-F]+))([pP][-+]?[0-9]+)/,
-        /[-+]?(nan|inf|infinity)/,
+        token(prec(1, /[-+]?(nan|inf|infinity)/)),
       ),
     boolean_constant: ($) => choice("true", "false"),
 
