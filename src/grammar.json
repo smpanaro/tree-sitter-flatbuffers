@@ -1062,6 +1062,10 @@
         {
           "type": "SYMBOL",
           "name": "float_constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "null_constant"
         }
       ]
     },
@@ -1078,7 +1082,7 @@
         }
       ]
     },
-    "value": {
+    "_value": {
       "type": "CHOICE",
       "members": [
         {
@@ -1096,8 +1100,8 @@
       ]
     },
     "vector_constant": {
-      "type": "STRING",
-      "value": "[]"
+      "type": "PATTERN",
+      "value": "\\[\\s*\\]"
     },
     "json_object": {
       "type": "SEQ",
@@ -1157,7 +1161,7 @@
         }
       ]
     },
-    "_object_field": {
+    "pair": {
       "type": "SEQ",
       "members": [
         {
@@ -1182,8 +1186,21 @@
           "value": ":"
         },
         {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_value"
+          }
+        }
+      ]
+    },
+    "_object_field": {
+      "type": "SEQ",
+      "members": [
+        {
           "type": "SYMBOL",
-          "name": "value"
+          "name": "pair"
         }
       ]
     },
@@ -1202,7 +1219,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "value"
+                  "name": "_value"
                 },
                 {
                   "type": "REPEAT",
@@ -1215,7 +1232,7 @@
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "value"
+                        "name": "_value"
                       }
                     ]
                   }
@@ -1371,6 +1388,10 @@
           "value": "false"
         }
       ]
+    },
+    "null_constant": {
+      "type": "STRING",
+      "value": "null"
     },
     "comment": {
       "type": "CHOICE",

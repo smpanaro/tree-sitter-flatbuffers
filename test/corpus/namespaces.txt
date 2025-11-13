@@ -106,3 +106,22 @@ table TableType {
             default: (qualified_ident scope: (ident) name: (ident)))
     )
 )
+
+=========================
+NAMESPACES: defaults
+=========================
+
+root_type ns.foo.Foo;
+
+---
+
+(schema
+    (root_type type: (qualified_ident
+        scope: (ident)
+        name: (qualified_ident
+            scope: (ident)
+            name: (ident)
+            )
+        )
+    )
+)

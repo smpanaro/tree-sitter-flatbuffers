@@ -206,16 +206,26 @@ module.exports = grammar({
 
     // Values and Constants
     _scalar: ($) =>
-      choice($.boolean_constant, $.integer_constant, $.float_constant),
+      choice(
+        $.boolean_constant,
+        $.integer_constant,
+        $.float_constant,
+        $.null_constant,
+      ),
     _single_value: ($) => choice($._scalar, $.string_constant),
-    value: ($) => choice($._single_value, $.json_object, $.json_array),
-    vector_constant: ($) => "[]",
+    _value: ($) => choice($._single_value, $.json_object, $.json_array),
+    vector_constant: ($) => /\[\s*\]/,
 
     // JSON support
     json_object: ($) => seq("{", commaSep($._object_field), "}"),
-    _object_field: ($) =>
-      seq(field("key", choice($.ident, $.string_constant)), ":", $.value),
-    json_array: ($) => seq("[", commaSep($.value), "]"),
+    pair: ($) =>
+      seq(
+        field("key", choice($.ident, $.string_constant)),
+        ":",
+        field("value", $._value),
+      ),
+    _object_field: ($) => seq($.pair),
+    json_array: ($) => seq("[", commaSep($._value), "]"),
 
     // Terminals
     ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
@@ -242,6 +252,7 @@ module.exports = grammar({
         token(prec(1, /[-+]?(nan|inf|infinity)/)),
       ),
     boolean_constant: ($) => choice("true", "false"),
+    null_constant: ($) => "null",
 
     comment: ($) =>
       choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")),

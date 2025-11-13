@@ -23,8 +23,8 @@ OBJECTS: quoted or unquoted keys
 
 (schema
     (json_object
-        key: (string_constant) (value (integer_constant))
-        key: (ident) (value (string_constant))
+        (pair key: (string_constant) value: (integer_constant))
+        (pair key: (ident) value: (string_constant))
     )
 )
 
@@ -41,8 +41,8 @@ OBJECTS: array fields
 
 (schema
     (json_object
-        key: (ident) (value (json_array (value (integer_constant)) (value (integer_constant)) (value (integer_constant))))
-        key: (ident) (value (json_array (value (string_constant))))
+        (pair key: (ident) value: (json_array (integer_constant) (integer_constant) (integer_constant)))
+        (pair key: (ident) value: (json_array (string_constant)))
     )
 )
 
@@ -58,10 +58,10 @@ OBJECTS: array of object fields
 
 (schema
     (json_object
-        key: (ident) (value
-            (json_array
-                (value (json_object key: (ident) (value (integer_constant))))
-                (value (json_object key: (ident) (value (integer_constant))))
+        (pair key: (ident)
+            value: (json_array
+                (json_object (pair key: (ident) value: (integer_constant)))
+                (json_object (pair key: (ident) value: (integer_constant)))
             )
         )
     )

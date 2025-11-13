@@ -14,3 +14,68 @@ table MoreDefaults {
   abcs: [ABC] = [];
   bools: [bool] = [];
 }
+
+---
+
+(schema
+    (comment)
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+    )
+
+    (table name: (ident)
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
+        (table_field name: (ident) type: (vector_type element: (ident)) default: (vector_constant))
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+    )
+)
+
+
+=========================
+DEFAULTS: null
+=========================
+
+table T {
+    abs: int = null;
+}
+
+---
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (scalar_type)
+            default: (null_constant))
+    )
+)
+
+=========================
+DEFAULTS: enums
+=========================
+
+enum ABC: int { A, B, C }
+
+table T {
+    abc: ABC = A;
+}
+
+---
+
+(schema
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+    )
+
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (ident)
+            default: (ident))
+    )
+)
