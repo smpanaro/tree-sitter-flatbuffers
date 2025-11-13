@@ -599,6 +599,11 @@
     }
   },
   {
+    "type": "string_constant",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "struct",
     "named": true,
     "fields": {
@@ -889,6 +894,14 @@
     }
   },
   {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "'",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -1035,10 +1048,6 @@
   {
     "type": "string",
     "named": false
-  },
-  {
-    "type": "string_constant",
-    "named": true
   },
   {
     "type": "struct",

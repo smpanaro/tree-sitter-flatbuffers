@@ -243,7 +243,10 @@ module.exports = grammar({
     // ident or a qualified_ident.
     _type_ident: ($) => choice($.qualified_ident, $.ident),
 
-    string_constant: ($) => /("[^"]*?"|'[^']*?')/,
+    string_constant: ($) =>
+      choice($._single_quote_string, $._double_quote_string),
+    _single_quote_string: ($) => seq(`'`, /[^']*?/, `'`),
+    _double_quote_string: ($) => seq(`"`, /[^"]*?/, `"`),
     integer_constant: ($) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
     float_constant: ($) =>
       choice(
