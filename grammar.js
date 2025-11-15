@@ -1,3 +1,9 @@
+/**
+ * @file Tree-Sitter grammar for FlatBuffers schema files.
+ * @author Stephen Panaro
+ * @license MIT
+ */
+
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
