@@ -8,6 +8,7 @@ module.exports = grammar({
   name: "flatbuffers",
 
   extras: ($) => [$.comment, /\s/],
+  word: ($) => $.ident,
 
   rules: {
     schema: ($) =>
@@ -42,7 +43,8 @@ module.exports = grammar({
       seq("file_extension", field("name", $.string_constant), ";"),
     file_identifier: ($) =>
       seq("file_identifier", field("name", $.string_constant), ";"),
-    root_type: ($) => seq("root_type", field("type", $._type_ident), ";"),
+    root_type: ($) =>
+      seq("root_type", field("type", $._custom_type_ident), ";"),
 
     // Object Declarations
     table: ($) =>
@@ -105,7 +107,14 @@ module.exports = grammar({
         optional(
           field(
             "default",
-            seq("=", choice($._single_value, $._type_ident, $.vector_constant)),
+            seq(
+              "=",
+              choice(
+                $._scalar_constant,
+                $._custom_type_ident,
+                $.vector_constant,
+              ),
+            ),
           ),
         ),
         optional($.metadata),
@@ -131,33 +140,26 @@ module.exports = grammar({
     union_field: ($) =>
       seq(
         optional(seq(field("alias", $.ident), ":")),
-        field("type", $._type_ident),
+        field("type", $._custom_type_ident),
       ),
 
     rpc_method: ($) =>
       seq(
         field("name", $.ident),
         "(",
-        field("request", $._type_ident),
+        field("request", $._custom_type_ident),
         ")",
         ":",
-        field("response", $._type_ident),
+        field("response", $._custom_type_ident),
         optional($.metadata),
         ";",
       ),
 
     // Type System
-    _type_reference: ($) => choice($.scalar_type, $._type_ident),
+    _type_reference: ($) => choice($.scalar_type, $._custom_type_ident),
 
-    _type: ($) =>
-      choice(
-        // alias($._type_reference, $.scalar_type), // TODO: needed?
-        $._type_reference,
-        $.vector_type,
-        $.array_type,
-      ),
+    _type: ($) => choice($._type_reference, $.vector_type, $.array_type),
 
-    // TODO: Could this handle scalar_type better?
     vector_type: ($) => seq("[", field("element", $._type_reference), "]"),
 
     array_type: ($) =>
@@ -172,27 +174,13 @@ module.exports = grammar({
     scalar_type: ($) =>
       choice(
         "bool",
-        "byte",
-        "ubyte",
-        "short",
-        "ushort",
-        "int",
-        "uint",
-        "float",
-        "long",
-        "ulong",
-        "double",
-        "int8",
-        "uint8",
-        "int16",
-        "uint16",
-        "int32",
-        "uint32",
-        "int64",
-        "uint64",
-        "float32",
-        "float64",
         "string",
+        /u?int(8|16|32|64)?/,
+        /u?byte/,
+        /u?short/,
+        /u?long/,
+        /float(32|64)?/,
+        "double",
       ),
 
     // Metadata
@@ -201,52 +189,44 @@ module.exports = grammar({
     attribute: ($) =>
       seq(
         field("name", $.ident),
-        optional(seq(":", field("value", $._single_value))),
+        optional(seq(":", field("value", $._scalar_constant))),
       ),
 
-    // Values and Constants
-    _scalar: ($) =>
+    // Constants
+    _scalar_constant: ($) =>
       choice(
         $.boolean_constant,
         $.integer_constant,
         $.float_constant,
         $.null_constant,
+        $.string_constant,
       ),
-    _single_value: ($) => choice($._scalar, $.string_constant),
-    _value: ($) => choice($._single_value, $.json_object, $.json_array),
     vector_constant: ($) => /\[\s*\]/,
 
-    // JSON support
+    // JSON (FlexBuffers)
     json_object: ($) => seq("{", commaSep($._object_field), "}"),
+    _json_value: ($) => choice($._scalar_constant, $.json_object, $.json_array),
     pair: ($) =>
       seq(
         field("key", choice($.ident, $.string_constant)),
         ":",
-        field("value", $._value),
+        field("value", $._json_value),
       ),
     _object_field: ($) => seq($.pair),
-    json_array: ($) => seq("[", commaSep($._value), "]"),
+    json_array: ($) => seq("[", commaSep($._json_value), "]"),
 
     // Terminals
     ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    _dot_scope_resolution: ($) =>
+    _scope: ($) =>
       prec(1, seq(field("scope", choice($.ident, $.qualified_ident)), ".")),
 
     qualified_ident: ($) =>
-      seq(
-        $._dot_scope_resolution,
-        field("name", choice($.qualified_ident, $.ident)),
-      ),
+      seq($._scope, field("name", choice($.qualified_ident, $.ident))),
 
-    // Helper: any place that accepts a type name can take either a single
-    // ident or a qualified_ident.
-    _type_ident: ($) => choice($.qualified_ident, $.ident),
+    _custom_type_ident: ($) => choice($.qualified_ident, $.ident), // user-defined table, enum, etc
 
-    string_constant: ($) =>
-      choice($._single_quote_string, $._double_quote_string),
-    _single_quote_string: ($) => seq(`'`, /[^']*?/, `'`),
-    _double_quote_string: ($) => seq(`"`, /[^"]*?/, `"`),
+    string_constant: ($) => choice(/'([^'\\]|\\.)*'/, /"([^"\\]|\\.)*"/),
     integer_constant: ($) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
     float_constant: ($) =>
       choice(

@@ -894,14 +894,6 @@
     }
   },
   {
-    "type": "\"",
-    "named": false
-  },
-  {
-    "type": "'",
-    "named": false
-  },
-  {
     "type": "(",
     "named": false
   },
@@ -958,10 +950,6 @@
     "named": false
   },
   {
-    "type": "byte",
-    "named": false
-  },
-  {
     "type": "double",
     "named": false
   },
@@ -982,47 +970,11 @@
     "named": false
   },
   {
-    "type": "float",
-    "named": false
-  },
-  {
-    "type": "float32",
-    "named": false
-  },
-  {
-    "type": "float64",
-    "named": false
-  },
-  {
     "type": "ident",
     "named": true
   },
   {
     "type": "include",
-    "named": false
-  },
-  {
-    "type": "int",
-    "named": false
-  },
-  {
-    "type": "int16",
-    "named": false
-  },
-  {
-    "type": "int32",
-    "named": false
-  },
-  {
-    "type": "int64",
-    "named": false
-  },
-  {
-    "type": "int8",
-    "named": false
-  },
-  {
-    "type": "long",
     "named": false
   },
   {
@@ -1042,10 +994,6 @@
     "named": false
   },
   {
-    "type": "short",
-    "named": false
-  },
-  {
     "type": "string",
     "named": false
   },
@@ -1062,39 +1010,7 @@
     "named": false
   },
   {
-    "type": "ubyte",
-    "named": false
-  },
-  {
-    "type": "uint",
-    "named": false
-  },
-  {
-    "type": "uint16",
-    "named": false
-  },
-  {
-    "type": "uint32",
-    "named": false
-  },
-  {
-    "type": "uint64",
-    "named": false
-  },
-  {
-    "type": "uint8",
-    "named": false
-  },
-  {
-    "type": "ulong",
-    "named": false
-  },
-  {
     "type": "union",
-    "named": false
-  },
-  {
-    "type": "ushort",
     "named": false
   },
   {

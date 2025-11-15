@@ -1,6 +1,7 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "flatbuffers",
+  "word": "ident",
   "rules": {
     "schema": {
       "type": "REPEAT",
@@ -205,7 +206,7 @@
           "name": "type",
           "content": {
             "type": "SYMBOL",
-            "name": "_type_ident"
+            "name": "_custom_type_ident"
           }
         },
         {
@@ -551,11 +552,11 @@
                     "members": [
                       {
                         "type": "SYMBOL",
-                        "name": "_single_value"
+                        "name": "_scalar_constant"
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "_type_ident"
+                        "name": "_custom_type_ident"
                       },
                       {
                         "type": "SYMBOL",
@@ -713,7 +714,7 @@
           "name": "type",
           "content": {
             "type": "SYMBOL",
-            "name": "_type_ident"
+            "name": "_custom_type_ident"
           }
         }
       ]
@@ -738,7 +739,7 @@
           "name": "request",
           "content": {
             "type": "SYMBOL",
-            "name": "_type_ident"
+            "name": "_custom_type_ident"
           }
         },
         {
@@ -754,7 +755,7 @@
           "name": "response",
           "content": {
             "type": "SYMBOL",
-            "name": "_type_ident"
+            "name": "_custom_type_ident"
           }
         },
         {
@@ -784,7 +785,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_type_ident"
+          "name": "_custom_type_ident"
         }
       ]
     },
@@ -868,87 +869,31 @@
         },
         {
           "type": "STRING",
-          "value": "byte"
+          "value": "string"
         },
         {
-          "type": "STRING",
-          "value": "ubyte"
+          "type": "PATTERN",
+          "value": "u?int(8|16|32|64)?"
         },
         {
-          "type": "STRING",
-          "value": "short"
+          "type": "PATTERN",
+          "value": "u?byte"
         },
         {
-          "type": "STRING",
-          "value": "ushort"
+          "type": "PATTERN",
+          "value": "u?short"
         },
         {
-          "type": "STRING",
-          "value": "int"
+          "type": "PATTERN",
+          "value": "u?long"
         },
         {
-          "type": "STRING",
-          "value": "uint"
-        },
-        {
-          "type": "STRING",
-          "value": "float"
-        },
-        {
-          "type": "STRING",
-          "value": "long"
-        },
-        {
-          "type": "STRING",
-          "value": "ulong"
+          "type": "PATTERN",
+          "value": "float(32|64)?"
         },
         {
           "type": "STRING",
           "value": "double"
-        },
-        {
-          "type": "STRING",
-          "value": "int8"
-        },
-        {
-          "type": "STRING",
-          "value": "uint8"
-        },
-        {
-          "type": "STRING",
-          "value": "int16"
-        },
-        {
-          "type": "STRING",
-          "value": "uint16"
-        },
-        {
-          "type": "STRING",
-          "value": "int32"
-        },
-        {
-          "type": "STRING",
-          "value": "uint32"
-        },
-        {
-          "type": "STRING",
-          "value": "int64"
-        },
-        {
-          "type": "STRING",
-          "value": "uint64"
-        },
-        {
-          "type": "STRING",
-          "value": "float32"
-        },
-        {
-          "type": "STRING",
-          "value": "float64"
-        },
-        {
-          "type": "STRING",
-          "value": "string"
         }
       ]
     },
@@ -1036,7 +981,7 @@
                   "name": "value",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "_single_value"
+                    "name": "_scalar_constant"
                   }
                 }
               ]
@@ -1048,7 +993,7 @@
         }
       ]
     },
-    "_scalar": {
+    "_scalar_constant": {
       "type": "CHOICE",
       "members": [
         {
@@ -1066,36 +1011,10 @@
         {
           "type": "SYMBOL",
           "name": "null_constant"
-        }
-      ]
-    },
-    "_single_value": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_scalar"
         },
         {
           "type": "SYMBOL",
           "name": "string_constant"
-        }
-      ]
-    },
-    "_value": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_single_value"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "json_object"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "json_array"
         }
       ]
     },
@@ -1161,6 +1080,23 @@
         }
       ]
     },
+    "_json_value": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_scalar_constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "json_object"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "json_array"
+        }
+      ]
+    },
     "pair": {
       "type": "SEQ",
       "members": [
@@ -1190,7 +1126,7 @@
           "name": "value",
           "content": {
             "type": "SYMBOL",
-            "name": "_value"
+            "name": "_json_value"
           }
         }
       ]
@@ -1219,7 +1155,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "_value"
+                  "name": "_json_value"
                 },
                 {
                   "type": "REPEAT",
@@ -1232,7 +1168,7 @@
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "_value"
+                        "name": "_json_value"
                       }
                     ]
                   }
@@ -1266,7 +1202,7 @@
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
     },
-    "_dot_scope_resolution": {
+    "_scope": {
       "type": "PREC",
       "value": 1,
       "content": {
@@ -1301,7 +1237,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_dot_scope_resolution"
+          "name": "_scope"
         },
         {
           "type": "FIELD",
@@ -1322,7 +1258,7 @@
         }
       ]
     },
-    "_type_ident": {
+    "_custom_type_ident": {
       "type": "CHOICE",
       "members": [
         {
@@ -1339,46 +1275,12 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_single_quote_string"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_double_quote_string"
-        }
-      ]
-    },
-    "_double_quote_string": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "\""
+          "type": "PATTERN",
+          "value": "'([^'\\\\]|\\\\.)*'"
         },
         {
           "type": "PATTERN",
-          "value": "[^\"]*?"
-        },
-        {
-          "type": "STRING",
-          "value": "\""
-        }
-      ]
-    },
-    "_single_quote_string": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "'"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^']*?"
-        },
-        {
-          "type": "STRING",
-          "value": "'"
+          "value": "\"([^\"\\\\]|\\\\.)*\""
         }
       ]
     },
