@@ -1,0 +1,16 @@
+attribute attr;
+
+table Req {}
+table Res {}
+
+rpc_service Svc {
+// <- keyword
+//          ^ type
+    Method(Req): Res;
+//  ^ function
+//         ^ type
+//               ^ type
+    Method2(Req): Res (attr: 0x3);
+//                     ^ attribute
+//                           ^ number
+}

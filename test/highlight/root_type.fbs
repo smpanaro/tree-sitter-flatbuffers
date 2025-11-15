@@ -1,0 +1,7 @@
+namespace ns;
+table Foo {}
+
+root_type ns.Foo;
+// <- keyword
+//        ^ type
+//           ^ type
