@@ -7,10 +7,10 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const commaSep = (rule) =>
+const commaSep = (/** @type {RuleOrLiteral} */ rule) =>
   optional(seq(rule, repeat(seq(",", rule)), optional(",")));
 
-module.exports = grammar({
+export default grammar({
   name: "flatbuffers",
 
   extras: ($) => [$.comment, /\s/],
@@ -177,7 +177,7 @@ module.exports = grammar({
         "]",
       ),
 
-    scalar_type: ($) =>
+    scalar_type: (_) =>
       choice(
         "bool",
         "string",
@@ -207,7 +207,7 @@ module.exports = grammar({
         $.null_constant,
         $.string_constant,
       ),
-    vector_constant: ($) => /\[\s*\]/,
+    vector_constant: (_) => /\[\s*\]/,
 
     // JSON (FlexBuffers)
     json_object: ($) => seq("{", commaSep($._object_field), "}"),
@@ -222,7 +222,7 @@ module.exports = grammar({
     json_array: ($) => seq("[", commaSep($._json_value), "]"),
 
     // Terminals
-    ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    ident: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     _scope: ($) =>
       prec(1, seq(field("scope", choice($.ident, $.qualified_ident)), ".")),
@@ -232,18 +232,18 @@ module.exports = grammar({
 
     _custom_type_ident: ($) => choice($.qualified_ident, $.ident), // user-defined table, enum, etc
 
-    string_constant: ($) => choice(/'([^'\\]|\\.)*'/, /"([^"\\]|\\.)*"/),
-    integer_constant: ($) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
-    float_constant: ($) =>
+    string_constant: (_) => choice(/'([^'\\]|\\.)*'/, /"([^"\\]|\\.)*"/),
+    integer_constant: (_) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
+    float_constant: (_) =>
       choice(
         /[-+]?(([.][0-9]+)|([0-9]+[.][0-9]*)|([0-9]+))([eE][-+]?[0-9]+)?/,
         /[-+]?0[xX](([.][0-9a-fA-F]+)|([0-9a-fA-F]+[.][0-9a-fA-F]*)|([0-9a-fA-F]+))([pP][-+]?[0-9]+)/,
         token(prec(1, /[-+]?(nan|inf|infinity)/)),
       ),
-    boolean_constant: ($) => choice("true", "false"),
-    null_constant: ($) => "null",
+    boolean_constant: (_) => choice("true", "false"),
+    null_constant: (_) => "null",
 
-    comment: ($) =>
+    comment: (_) =>
       choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")),
   },
 });
