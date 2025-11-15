@@ -266,10 +266,10 @@ file_extension "mon";
           (ident))
         (union_field
           (qualified_ident
-            (ident)
             (qualified_ident
               (ident)
-              (ident)))))
+              (ident))
+            (ident))))
       (union
         (ident)
         (union_field
@@ -281,10 +281,10 @@ file_extension "mon";
         (union_field
           (ident)
           (qualified_ident
-            (ident)
             (qualified_ident
               (ident)
-              (ident)))))
+              (ident))
+            (ident))))
       (union
         (ident)
         (union_field
@@ -500,10 +500,10 @@ file_extension "mon";
         (table_field
           (ident)
           (qualified_ident
-            (ident)
             (qualified_ident
               (ident)
-              (ident)))
+              (ident))
+            (ident))
           (metadata
             (attribute
               (ident)

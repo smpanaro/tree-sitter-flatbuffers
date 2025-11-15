@@ -40,11 +40,11 @@ table Foo {
     (table name: (ident)
         (table_field name: (ident)
             type: (qualified_ident
-                scope: (ident)
-                name: (qualified_ident
+                scope: (qualified_ident
                     scope: (ident)
                     name: (ident)
                 )
+                name: (ident)
             )
         )
         (table_field name: (ident)
@@ -53,11 +53,11 @@ table Foo {
         (table_field name: (ident)
             type: (vector_type
                 element: (qualified_ident
-                    scope: (ident)
-                    name: (qualified_ident
+                    scope: (qualified_ident
                         scope: (ident)
                         name: (ident)
                     )
+                    name: (ident)
                 )
             )
         )
@@ -79,10 +79,10 @@ union UnionType { com.foo.TableOne, com.TableTwo, }
     (union name: (ident)
         (union_field
             type: (qualified_ident
-                scope: (ident)
-                name: (qualified_ident
+                scope: (qualified_ident
                     scope: (ident)
-                    name: (ident))))
+                    name: (ident))
+                name: (ident)))
         (union_field
             type: (qualified_ident
                 scope: (ident)
@@ -108,20 +108,27 @@ table TableType {
 )
 
 =========================
-NAMESPACES: defaults
+NAMESPACES: root_type
 =========================
 
-root_type ns.foo.Foo;
+root_type ns.bar.foo.Baz;
 
 ---
 
 (schema
+                     ; ns.bar.foo.Baz
     (root_type type: (qualified_ident
-        scope: (ident)
-        name: (qualified_ident
-            scope: (ident)
-            name: (ident)
-            )
-        )
+               ; ns.bar.foo
+        scope: (qualified_ident
+                   ; ns.bar
+            scope: (qualified_ident
+                       ; ns
+                scope: (ident)
+                       ; bar
+                name: (ident))
+                  ; foo
+            name: (ident))
+              ; Baz
+        name: (ident))
     )
 )

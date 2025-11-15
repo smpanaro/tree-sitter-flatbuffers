@@ -224,11 +224,14 @@ export default grammar({
     // Terminals
     ident: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    _scope: ($) =>
-      prec(1, seq(field("scope", choice($.ident, $.qualified_ident)), ".")),
-
+    // Right associate here so that going from a name to it's preceding scope is easy.
+    // e.g. in com.foo.bar.Baz, going from bar to com.foo.bar
     qualified_ident: ($) =>
-      seq($._scope, field("name", choice($.qualified_ident, $.ident))),
+      seq(
+        field("scope", choice($.qualified_ident, $.ident)),
+        ".",
+        field("name", $.ident),
+      ),
 
     _custom_type_ident: ($) => choice($.qualified_ident, $.ident), // user-defined table, enum, etc
 

@@ -1202,46 +1202,12 @@
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
     },
-    "_scope": {
-      "type": "PREC",
-      "value": 1,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "scope",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "ident"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "qualified_ident"
-                }
-              ]
-            }
-          },
-          {
-            "type": "STRING",
-            "value": "."
-          }
-        ]
-      }
-    },
     "qualified_ident": {
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_scope"
-        },
-        {
           "type": "FIELD",
-          "name": "name",
+          "name": "scope",
           "content": {
             "type": "CHOICE",
             "members": [
@@ -1254,6 +1220,18 @@
                 "name": "ident"
               }
             ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "ident"
           }
         }
       ]

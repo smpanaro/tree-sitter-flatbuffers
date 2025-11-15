@@ -410,10 +410,6 @@
           {
             "type": "ident",
             "named": true
-          },
-          {
-            "type": "qualified_ident",
-            "named": true
           }
         ]
       },
