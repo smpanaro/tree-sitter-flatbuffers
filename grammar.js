@@ -235,7 +235,10 @@ export default grammar({
 
     _custom_type_ident: ($) => choice($.qualified_ident, $.ident), // user-defined table, enum, etc
 
-    string_constant: (_) => choice(/'([^'\\]|\\.)*'/, /"([^"\\]|\\.)*"/),
+    string_constant: (_) =>
+      // These are seq so that ' and " are nodes. This allows editors to treat them as brackets.
+      choice(seq(`'`, /([^'\\]|\\.)*/, `'`), seq(`"`, /([^"\\]|\\.)*/, `"`)),
+
     integer_constant: (_) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
     float_constant: (_) =>
       choice(
