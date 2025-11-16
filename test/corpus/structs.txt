@@ -6,7 +6,7 @@ struct StructType {}
 
 ----
 
-(schema (struct (ident)))
+(schema (struct name: (ident)))
 
 =========================
 STRUCTS: array
@@ -19,8 +19,9 @@ struct Vec3 {
 ----
 
 (schema
-    (struct (ident)
-        (struct_field (ident) (array_type (type) (integer_constant)))
+    (struct name: (ident)
+        (struct_field name: (ident)
+            type: (array_type element: (scalar_type) size: (integer_constant)))
     )
 )
 
@@ -33,8 +34,8 @@ struct StructType (force_align: 8) {}
 ----
 
 (schema
-    (struct (ident)
-        (metadata (ident) (integer_constant))
+    (struct name: (ident)
+        (metadata (attribute name: (ident) value: (integer_constant)))
     )
 )
 
@@ -49,8 +50,8 @@ struct StructType {
 ----
 
 (schema
-    (struct (ident)
-        (struct_field (ident) (type))
+    (struct name: (ident)
+        (struct_field name: (ident) type: (scalar_type))
     )
 )
 
@@ -66,9 +67,9 @@ struct StructType {
 ----
 
 (schema
-    (struct (ident)
-        (struct_field (ident) (type))
-        (struct_field (ident) (type))
+    (struct name: (ident)
+        (struct_field name: (ident) type: (scalar_type))
+        (struct_field name: (ident) type: (ident))
     )
 )
 
@@ -83,8 +84,10 @@ struct StructType {
 ----
 
 (schema
-    (struct (ident)
-        (struct_field (ident) (type) (metadata (ident)))
+    (struct name: (ident)
+        (struct_field name: (ident)
+            type: (scalar_type)
+            (metadata (attribute name: (ident))))
     )
 )
 

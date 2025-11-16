@@ -1,0 +1,18 @@
+namespace com.foo;
+table Object {}
+table Right {}
+table Middle {}
+
+union Any {
+// <- keyword
+//    ^ type
+    left: Object,
+//  ^ variant
+//        ^ type
+    Right,
+//  ^ type
+    com.foo.Middle,
+//  ^ type
+//      ^ type
+//          ^ type
+}

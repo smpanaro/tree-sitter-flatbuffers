@@ -2,20 +2,35 @@
   {
     "type": "array_type",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "integer_constant",
-          "named": true
-        },
-        {
-          "type": "type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "element": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          }
+        ]
+      },
+      "size": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -28,6 +43,28 @@
         "types": [
           {
             "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "boolean_constant",
+            "named": true
+          },
+          {
+            "type": "float_constant",
+            "named": true
+          },
+          {
+            "type": "integer_constant",
+            "named": true
+          },
+          {
+            "type": "null_constant",
             "named": true
           },
           {
@@ -46,30 +83,80 @@
   {
     "type": "comment",
     "named": true,
+    "extra": true,
     "fields": {}
+  },
+  {
+    "type": "custom_attribute",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "enum",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "enum_field",
           "named": true
         },
         {
-          "type": "ident",
-          "named": true
-        },
-        {
           "type": "metadata",
-          "named": true
-        },
-        {
-          "type": "type",
           "named": true
         }
       ]
@@ -88,6 +175,16 @@
             "named": true
           }
         ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "integer_constant",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -95,7 +192,7 @@
       "required": false,
       "types": [
         {
-          "type": "integer_constant",
+          "type": "metadata",
           "named": true
         }
       ]
@@ -104,31 +201,33 @@
   {
     "type": "file_extension",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "file_identifier",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -139,16 +238,17 @@
   {
     "type": "include",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -165,7 +265,31 @@
       "required": false,
       "types": [
         {
-          "type": "value",
+          "type": "boolean_constant",
+          "named": true
+        },
+        {
+          "type": "float_constant",
+          "named": true
+        },
+        {
+          "type": "integer_constant",
+          "named": true
+        },
+        {
+          "type": "json_array",
+          "named": true
+        },
+        {
+          "type": "json_object",
+          "named": true
+        },
+        {
+          "type": "null_constant",
+          "named": true
+        },
+        {
+          "type": "string_constant",
           "named": true
         }
       ]
@@ -174,28 +298,13 @@
   {
     "type": "json_object",
     "named": true,
-    "fields": {
-      "key": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          },
-          {
-            "type": "string_constant",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "value",
+          "type": "pair",
           "named": true
         }
       ]
@@ -210,23 +319,7 @@
       "required": false,
       "types": [
         {
-          "type": "boolean_constant",
-          "named": true
-        },
-        {
-          "type": "float_constant",
-          "named": true
-        },
-        {
-          "type": "ident",
-          "named": true
-        },
-        {
-          "type": "integer_constant",
-          "named": true
-        },
-        {
-          "type": "string_constant",
+          "type": "attribute",
           "named": true
         }
       ]
@@ -253,7 +346,61 @@
     }
   },
   {
-    "type": "root_type",
+    "type": "pair",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "boolean_constant",
+            "named": true
+          },
+          {
+            "type": "float_constant",
+            "named": true
+          },
+          {
+            "type": "integer_constant",
+            "named": true
+          },
+          {
+            "type": "json_array",
+            "named": true
+          },
+          {
+            "type": "json_object",
+            "named": true
+          },
+          {
+            "type": "null_constant",
+            "named": true
+          },
+          {
+            "type": "string_constant",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "qualified_ident",
     "named": true,
     "fields": {
       "name": {
@@ -262,6 +409,40 @@
         "types": [
           {
             "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "scope": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "root_type",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
             "named": true
           }
         ]
@@ -289,6 +470,10 @@
           {
             "type": "ident",
             "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
           }
         ]
       },
@@ -298,6 +483,10 @@
         "types": [
           {
             "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
             "named": true
           }
         ]
@@ -341,19 +530,21 @@
     }
   },
   {
+    "type": "scalar_type",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "schema",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "attribute",
-          "named": true
-        },
-        {
-          "type": "comment",
+          "type": "custom_attribute",
           "named": true
         },
         {
@@ -404,6 +595,11 @@
     }
   },
   {
+    "type": "string_constant",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "struct",
     "named": true,
     "fields": {
@@ -446,26 +642,40 @@
             "named": true
           }
         ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
-          "type": "array_type",
-          "named": true
-        },
-        {
           "type": "metadata",
-          "named": true
-        },
-        {
-          "type": "type",
-          "named": true
-        },
-        {
-          "type": "vector_type",
           "named": true
         }
       ]
@@ -530,6 +740,14 @@
             "named": true
           },
           {
+            "type": "null_constant",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
             "type": "string_constant",
             "named": true
           },
@@ -548,41 +766,40 @@
             "named": true
           }
         ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          },
+          {
+            "type": "vector_type",
+            "named": true
+          }
+        ]
       }
     },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "metadata",
-          "named": true
-        },
-        {
-          "type": "type",
-          "named": true
-        },
-        {
-          "type": "vector_type",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type",
-    "named": true,
-    "fields": {},
     "children": {
       "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "ident",
-          "named": true
-        },
-        {
-          "type": "vector_type",
+          "type": "metadata",
           "named": true
         }
       ]
@@ -591,15 +808,22 @@
   {
     "type": "union",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "ident",
-          "named": true
-        },
         {
           "type": "metadata",
           "named": true
@@ -615,7 +839,7 @@
     "type": "union_field",
     "named": true,
     "fields": {
-      "name": {
+      "alias": {
         "multiple": false,
         "required": false,
         "types": [
@@ -625,12 +849,16 @@
           }
         ]
       },
-      "typename": {
+      "type": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
             "named": true
           }
         ]
@@ -638,54 +866,36 @@
     }
   },
   {
-    "type": "value",
+    "type": "vector_type",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "boolean_constant",
-          "named": true
-        },
-        {
-          "type": "float_constant",
-          "named": true
-        },
-        {
-          "type": "integer_constant",
-          "named": true
-        },
-        {
-          "type": "json_array",
-          "named": true
-        },
-        {
-          "type": "json_object",
-          "named": true
-        },
-        {
-          "type": "string_constant",
-          "named": true
-        }
-      ]
+    "fields": {
+      "element": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "qualified_ident",
+            "named": true
+          },
+          {
+            "type": "scalar_type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
-    "type": "vector_type",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "type",
-          "named": true
-        }
-      ]
-    }
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "'",
+    "named": false
   },
   {
     "type": "(",
@@ -744,10 +954,6 @@
     "named": false
   },
   {
-    "type": "byte",
-    "named": false
-  },
-  {
     "type": "double",
     "named": false
   },
@@ -768,18 +974,6 @@
     "named": false
   },
   {
-    "type": "float",
-    "named": false
-  },
-  {
-    "type": "float32",
-    "named": false
-  },
-  {
-    "type": "float64",
-    "named": false
-  },
-  {
     "type": "ident",
     "named": true
   },
@@ -788,32 +982,12 @@
     "named": false
   },
   {
-    "type": "int",
-    "named": false
-  },
-  {
-    "type": "int16",
-    "named": false
-  },
-  {
-    "type": "int32",
-    "named": false
-  },
-  {
-    "type": "int64",
-    "named": false
-  },
-  {
-    "type": "int8",
-    "named": false
-  },
-  {
-    "type": "long",
-    "named": false
-  },
-  {
     "type": "namespace",
     "named": false
+  },
+  {
+    "type": "null_constant",
+    "named": true
   },
   {
     "type": "root_type",
@@ -824,16 +998,8 @@
     "named": false
   },
   {
-    "type": "short",
-    "named": false
-  },
-  {
     "type": "string",
     "named": false
-  },
-  {
-    "type": "string_constant",
-    "named": true
   },
   {
     "type": "struct",
@@ -848,39 +1014,7 @@
     "named": false
   },
   {
-    "type": "ubyte",
-    "named": false
-  },
-  {
-    "type": "uint",
-    "named": false
-  },
-  {
-    "type": "uint16",
-    "named": false
-  },
-  {
-    "type": "uint32",
-    "named": false
-  },
-  {
-    "type": "uint64",
-    "named": false
-  },
-  {
-    "type": "uint8",
-    "named": false
-  },
-  {
-    "type": "ulong",
-    "named": false
-  },
-  {
     "type": "union",
-    "named": false
-  },
-  {
-    "type": "ushort",
     "named": false
   },
   {

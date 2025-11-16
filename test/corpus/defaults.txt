@@ -1,0 +1,81 @@
+=========================
+DEFAULTS: official test
+=========================
+// https://github.com/google/flatbuffers/blob/807adb73b20f0afd1cfe92c576339ac8d21592a7/tests/more_defaults.fbs
+
+enum ABC: int { A, B, C }
+
+
+table MoreDefaults {
+  ints: [int] = [];
+  floats: [float] = [     ];
+  empty_string: string = "";
+  some_string: string = "some";
+  abcs: [ABC] = [];
+  bools: [bool] = [];
+}
+
+---
+
+(schema
+    (comment)
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+    )
+
+    (table name: (ident)
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
+        (table_field name: (ident) type: (scalar_type) default: (string_constant))
+        (table_field name: (ident) type: (vector_type element: (ident)) default: (vector_constant))
+        (table_field name: (ident) type: (vector_type element: (scalar_type)) default: (vector_constant))
+    )
+)
+
+
+=========================
+DEFAULTS: null
+=========================
+
+table T {
+    abs: int = null;
+}
+
+---
+
+(schema
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (scalar_type)
+            default: (null_constant))
+    )
+)
+
+=========================
+DEFAULTS: enums
+=========================
+
+enum ABC: int { A, B, C }
+
+table T {
+    abc: ABC = A;
+}
+
+---
+
+(schema
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+    )
+
+    (table name: (ident)
+        (table_field name: (ident)
+            type: (ident)
+            default: (ident))
+    )
+)

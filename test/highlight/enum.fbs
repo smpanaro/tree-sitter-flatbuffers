@@ -1,0 +1,20 @@
+attribute attr;
+attribute "key";
+
+/// RGB
+// <- comment
+enum Color : byte {
+// <- keyword
+//   ^ type
+//           ^ type.builtin
+    Red = 0,
+//  ^ variant
+//        ^ number
+    Blue,
+//  ^ variant
+    Green (attr, key: "val")
+//  ^ variant
+//         ^ attribute
+//               ^ attribute
+//                    ^ string
+}

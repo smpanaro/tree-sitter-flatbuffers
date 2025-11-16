@@ -6,7 +6,7 @@ union UnionType {}
 
 ----
 
-(schema (union (ident)))
+(schema (union name: (ident)))
 
 
 =========================
@@ -18,8 +18,8 @@ union UnionType { TableOne }
 ----
 
 (schema
-    (union (ident)
-        (union_field typename: (ident))
+    (union name: (ident)
+        (union_field type: (ident))
     )
 )
 
@@ -32,8 +32,8 @@ union UnionType { TableOne, }
 ----
 
 (schema
-    (union (ident)
-        (union_field typename: (ident))
+    (union name: (ident)
+        (union_field type: (ident))
     )
 )
 
@@ -46,9 +46,9 @@ union UnionType { TableOne, TableTwo, }
 ----
 
 (schema
-    (union (ident)
-        (union_field (ident))
-        (union_field (ident))
+    (union name: (ident)
+        (union_field type: (ident))
+        (union_field type: (ident))
     )
 )
 
@@ -64,13 +64,13 @@ union UnionType {
 ----
 
 (schema
-    (union (ident)
+    (union name: (ident)
         (union_field
-            name: (ident)
-            typename: (ident))
+            alias: (ident)
+            type: (ident))
         (union_field
-            name: (ident)
-            typename: (ident))
+            alias: (ident)
+            type: (ident))
     )
 )
 
@@ -87,15 +87,15 @@ union UnionType { A, /* comment one */ b: B,
 ----
 
 (schema
-    (union (ident)
-        (union_field typename: (ident))
+    (union name: (ident)
+        (union_field type: (ident))
         (comment)
         (union_field
-            name: (ident)
-            typename: (ident))
+            alias: (ident)
+            type: (ident))
         (comment)
         (comment)
-        (union_field typename: (ident))
+        (union_field type: (ident))
         (comment)
     )
 )

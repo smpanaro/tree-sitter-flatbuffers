@@ -2,9 +2,11 @@ struct Vec3 {
 // <- keyword
 //      ^ type
     xyz: [int: 3];
+//  ^field
 //       ^ punctuation.bracket
-//         ^ type
+//         ^ type.builtin
 //             ^ number
     origin: int;
-//          ^ type
+//  ^field
+//          ^ type.builtin
 }

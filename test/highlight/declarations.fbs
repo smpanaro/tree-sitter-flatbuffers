@@ -1,0 +1,20 @@
+attribute attr;
+// <- keyword
+//        ^ attribute
+attribute "key";
+//        ^ string
+
+file_identifier "abcd";
+// <- keyword
+//              ^ string
+
+file_extension "xyz";
+// <- keyword
+//             ^ string
+
+namespace com.foo;
+// <- keyword
+//        ^ type
+//           ^ punctuation.delimiter
+//            ^ type
+//               ^ punctuation.delimiter

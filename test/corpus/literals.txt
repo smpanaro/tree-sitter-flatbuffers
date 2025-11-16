@@ -6,14 +6,18 @@ file_extension "string";
 file_extension 'string';
 file_extension '';
 file_extension "";
+file_extension "esc\"ap\\ed";
+file_extension 'esc\'ap\\ed';
 
 ----
 
 (schema
-    (file_extension (string_constant))
-    (file_extension (string_constant))
-    (file_extension (string_constant))
-    (file_extension (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
+    (file_extension name: (string_constant))
 )
 
 =========================
@@ -35,16 +39,16 @@ enum IntLiterals : int {
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident) (integer_constant))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident) value: (integer_constant))
     )
 )
 
@@ -63,23 +67,31 @@ table FloatLiterals {
   h: float = nan;
   i: float = +inf;
   j: float = -infinity;
+  k: float = inf;
+  l: float = infinity;
+  m: float = -inf;
+  n: float = +infinity;
 }
 
 ----
 
 (schema
   (table
-    (ident)
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
-    (table_field (ident) (type) (float_constant))
+    name: (ident)
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
+    (table_field name: (ident) type: (scalar_type) default: (float_constant))
   )
 )
 
@@ -96,8 +108,8 @@ table BooleanLiterals {
 
 (schema
   (table
-    (ident)
-    (table_field (ident) (type) (boolean_constant))
-    (table_field (ident) (type) (boolean_constant))
+    name: (ident)
+    (table_field name: (ident) type: (scalar_type) default: (boolean_constant))
+    (table_field name: (ident) type: (scalar_type) default: (boolean_constant))
   )
 )

@@ -1,26 +1,45 @@
-table Monster {
+attribute key;
+attribute priority;
+
+enum Color: byte { Blue }
+table Vec3 {}
+union Any {}
+
+table Monster (key: "attr") {
 // <- keyword
 //    ^ type
+//             ^ attribute
+//                  ^ string
   pos:Vec3;
+//^field
 //    ^ type
   mana:short = 150;
-//     ^ type
+//^field
+//     ^ type.builtin
 //             ^ number
   hp:short = 100;
-//   ^ type
+//^field
+//   ^ type.builtin
 //           ^ number
   name:string;
-//     ^ type
+//^field
+//     ^ type.builtin
   friendly:bool = false (deprecated, priority: 1);
-//         ^ type
+//         ^ type.builtin
 //                ^ boolean
 //                       ^ attribute
 //                                   ^ attribute
 //                                             ^ number
   inventory:[ubyte];
-//           ^ type
+//^field
+//           ^ type.builtin
+//          ^ punctuation.bracket
+//                ^ punctuation.bracket
   color:Color = Blue;
+//^field
 //      ^ type
+//              ^ variant
   test:Any;
+//^field
 //     ^ type
 }

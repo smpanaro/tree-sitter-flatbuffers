@@ -1,0 +1,108 @@
+; [NOTE] These are copy/pasted to validate there are no errors, then manually validated in an IDE.
+
+=========================
+ARRAYS: official test
+=========================
+// https://github.com/google/flatbuffers/blob/807adb73b20f0afd1cfe92c576339ac8d21592a7/tests/arrays_test.fbs
+
+namespace MyGame.Example;
+
+enum TestEnum : byte { A, B, C }
+
+struct NestedStruct{
+  a:[int:2];
+  b:TestEnum;
+  c:[TestEnum:2];
+  d:[int64:2];
+}
+
+struct ArrayStruct{
+  a:float;
+  b:[int:0xF];
+  c:byte;
+  d:[NestedStruct:2];
+  e:int32;
+  f:[int64:2];
+}
+
+table ArrayTable{
+  a:ArrayStruct;
+}
+
+root_type ArrayTable;
+file_identifier "ARRT";
+file_extension "mon";
+
+---
+
+    (schema
+      (comment)
+      (namespace
+        (ident)
+        (ident))
+      (enum
+        (ident)
+        (scalar_type)
+        (enum_field
+          (ident))
+        (enum_field
+          (ident))
+        (enum_field
+          (ident)))
+      (struct
+        (ident)
+        (struct_field
+          (ident)
+          (array_type
+            (scalar_type)
+            (integer_constant)))
+        (struct_field
+          (ident)
+          (ident))
+        (struct_field
+          (ident)
+          (array_type
+            (ident)
+            (integer_constant)))
+        (struct_field
+          (ident)
+          (array_type
+            (scalar_type)
+            (integer_constant))))
+      (struct
+        (ident)
+        (struct_field
+          (ident)
+          (scalar_type))
+        (struct_field
+          (ident)
+          (array_type
+            (scalar_type)
+            (integer_constant)))
+        (struct_field
+          (ident)
+          (scalar_type))
+        (struct_field
+          (ident)
+          (array_type
+            (ident)
+            (integer_constant)))
+        (struct_field
+          (ident)
+          (scalar_type))
+        (struct_field
+          (ident)
+          (array_type
+            (scalar_type)
+            (integer_constant))))
+      (table
+        (ident)
+        (table_field
+          (ident)
+          (ident)))
+      (root_type
+        (ident))
+      (file_identifier
+        (string_constant))
+      (file_extension
+        (string_constant)))

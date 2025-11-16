@@ -7,7 +7,7 @@ enum EnumType : int {}
 ----
 
 (schema
-    (enum (ident) (type))
+    (enum name: (ident) type: (scalar_type))
 )
 
 =========================
@@ -28,8 +28,8 @@ enum EnumType : byte { A }
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
     )
 )
 
@@ -42,8 +42,8 @@ enum EnumType : short { A, }
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
     )
 )
 
@@ -60,10 +60,10 @@ enum EnumType : short {
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident) (integer_constant))
-        (enum_field (ident))
-        (enum_field (ident) (integer_constant))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident) value: (integer_constant))
+        (enum_field name: (ident))
+        (enum_field name: (ident) value: (integer_constant))
     )
 )
 
@@ -76,10 +76,10 @@ enum EnumType : ushort (bit_fields) { A, B, C }
 ----
 
 (schema
-    (enum (ident) (type) (metadata (ident))
-        (enum_field (ident))
-        (enum_field (ident))
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type) (metadata (attribute name: (ident)))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
+        (enum_field name: (ident))
     )
 )
 
@@ -96,13 +96,13 @@ enum EnumType : ushort { A, /* comment one */ B,
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
         (comment)
-        (enum_field (ident))
+        (enum_field name: (ident))
         (comment)
         (comment)
-        (enum_field (ident))
+        (enum_field name: (ident))
         (comment)
     )
 )
@@ -125,14 +125,14 @@ enum EnumType2 : ushort {
 ----
 
 (schema
-    (enum (ident) (type)
+    (enum name: (ident) type: (scalar_type)
         (comment)
-        (enum_field (ident))
+        (enum_field name: (ident))
     )
-    (enum (ident) (type)
+    (enum name: (ident) type: (scalar_type)
         (comment)
         (comment)
-        (enum_field (ident))
+        (enum_field name: (ident))
     )
 )
 
@@ -159,16 +159,16 @@ enum EnumType3 : ushort {
 ----
 
 (schema
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
         (comment)
     )
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
         (comment)
     )
-    (enum (ident) (type)
-        (enum_field (ident))
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident))
         (comment)
         (comment)
     )

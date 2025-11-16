@@ -1,20 +1,28 @@
+/**
+ * @file Tree-Sitter grammar for FlatBuffers schema files.
+ * @author Stephen Panaro
+ * @license MIT
+ */
+
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-// Based on https://flatbuffers.dev/flatbuffers_grammar.html
-module.exports = grammar({
+const commaSep = (/** @type {RuleOrLiteral} */ rule) =>
+  optional(seq(rule, repeat(seq(",", rule)), optional(",")));
+
+export default grammar({
   name: "flatbuffers",
 
   extras: ($) => [$.comment, /\s/],
+  word: ($) => $.ident,
 
   rules: {
     schema: ($) =>
       repeat(
         choice(
-          $.comment,
           $.include,
           $.namespace,
-          $.attribute,
+          $.custom_attribute,
           $.table,
           $.struct,
           $.enum,
@@ -27,22 +35,24 @@ module.exports = grammar({
         ),
       ),
 
-    // include
-    include: ($) => seq("include", $.string_constant, ";"),
-
-    // namespace_decl
+    // Declarations
+    include: ($) => seq("include", field("path", $.string_constant), ";"),
     namespace: ($) =>
       seq(
         "namespace",
         field("name", seq($.ident, repeat(seq(".", $.ident)))),
         ";",
       ),
-
-    // attribute_decl
-    attribute: ($) =>
+    custom_attribute: ($) =>
       seq("attribute", field("name", choice($.ident, $.string_constant)), ";"),
+    file_extension: ($) =>
+      seq("file_extension", field("name", $.string_constant), ";"),
+    file_identifier: ($) =>
+      seq("file_identifier", field("name", $.string_constant), ";"),
+    root_type: ($) =>
+      seq("root_type", field("type", $._custom_type_ident), ";"),
 
-    // type_decl
+    // Object Declarations
     table: ($) =>
       seq(
         "table",
@@ -53,36 +63,6 @@ module.exports = grammar({
         "}",
       ),
 
-    // field_decl
-    table_field: ($) =>
-      seq(
-        field("name", $.ident),
-        ":",
-        choice(
-          seq(
-            choice(alias($._builtin_type, $.type), $.vector_type),
-            optional(
-              field(
-                "default",
-                seq(
-                  "=",
-                  choice($.string_constant, $._scalar, $.vector_constant),
-                ),
-              ),
-            ),
-          ),
-          // enum fields
-          seq(
-            alias($.ident, $.type),
-            optional(field("default", seq("=", $._enum_field_name))),
-          ),
-        ),
-        optional($.metadata),
-        ";",
-      ),
-
-    // type_decl
-    // The official grammar combines table and struct but structs can't have default values.
     struct: ($) =>
       seq(
         "struct",
@@ -93,67 +73,28 @@ module.exports = grammar({
         "}",
       ),
 
-    // field_decl
-    struct_field: ($) =>
-      seq(
-        field("name", $.ident),
-        ":",
-        choice(
-          alias($._builtin_type, $.type),
-          alias($.ident, $.type),
-          $.vector_type,
-          $.array_type,
-        ),
-        optional($.metadata),
-        ";",
-      ),
-
-    // enum_decl
     enum: ($) =>
       seq(
         "enum",
-        $.ident,
+        field("name", $.ident),
         ":",
-        $.type,
+        field("type", $._type),
         optional($.metadata),
         "{",
-        repeat(seq($.enum_field, ",")),
-        optional($.enum_field),
+        commaSep($.enum_field),
         "}",
       ),
 
-    // enumval_decl
-    enum_field: ($) =>
-      seq(
-        field("name", $._enum_field_name),
-        optional(seq("=", $.integer_constant)),
-      ),
-
-    _enum_field_name: ($) => $.ident,
-
-    // enum_decl
-    // The official grammar combines enums and unions but unions can't have default values.
     union: ($) =>
       seq(
         "union",
-        $.ident,
+        field("name", $.ident),
         optional($.metadata),
         "{",
-        repeat(seq($.union_field, ",")),
-        optional($.union_field),
+        commaSep($.union_field),
         "}",
       ),
 
-    union_field: ($) =>
-      choice(
-        field("typename", $.ident),
-        seq(field("name", $.ident), ":", field("typename", $.ident)),
-      ),
-
-    // root_decl
-    root_type: ($) => seq("root_type", field("name", $.ident), ";"),
-
-    // rpc_decl
     rpc_service: ($) =>
       seq(
         "rpc_service",
@@ -163,117 +104,152 @@ module.exports = grammar({
         "}",
       ),
 
-    rpc_method: ($) =>
+    // Fields and Methods
+    table_field: ($) =>
       seq(
         field("name", $.ident),
-        "(",
-        field("request", $.ident),
-        ")",
         ":",
-        field("response", $.ident),
+        field("type", $._type),
+        optional(
+          field(
+            "default",
+            seq(
+              "=",
+              choice(
+                $._scalar_constant,
+                $._custom_type_ident,
+                $.vector_constant,
+              ),
+            ),
+          ),
+        ),
         optional($.metadata),
         ";",
       ),
 
-    _builtin_type: ($) =>
-      choice(
-        "bool",
-        "byte",
-        "ubyte",
-        "short",
-        "ushort",
-        "int",
-        "uint",
-        "float",
-        "long",
-        "ulong",
-        "double",
-        "int8",
-        "uint8",
-        "int16",
-        "uint16",
-        "int32",
-        "uint32",
-        "int64",
-        "uint64",
-        "float32",
-        "float64",
-        "string",
+    struct_field: ($) =>
+      seq(
+        field("name", $.ident),
+        ":",
+        field("type", $._type),
+        optional($.metadata),
+        ";",
       ),
 
-    vector_type: ($) => seq("[", $._vector_element, "]"),
-    _vector_element: ($) => alias(choice($._builtin_type, $.ident), $.type),
-
-    // Separate since currently only structs can have array members.
-    array_type: ($) => seq("[", $._array_element, ":", $.integer_constant, "]"),
-    _array_element: ($) => alias(choice($._builtin_type, $.ident), $.type),
-
-    type: ($) => choice($._builtin_type, $.vector_type, $.ident),
-
-    metadata: ($) =>
+    enum_field: ($) =>
       seq(
+        field("name", $.ident),
+        optional(seq("=", field("value", $.integer_constant))),
+        optional($.metadata), // Enums can have metadata too
+      ),
+
+    union_field: ($) =>
+      seq(
+        optional(seq(field("alias", $.ident), ":")),
+        field("type", $._custom_type_ident),
+      ),
+
+    rpc_method: ($) =>
+      seq(
+        field("name", $.ident),
         "(",
-        optional(
-          seq(
-            seq($.ident, optional(seq(":", $._single_value))),
-            repeat(seq(",", seq($.ident, optional(seq(":", $._single_value))))),
-            optional(","),
-          ),
-        ),
+        field("request", $._custom_type_ident),
         ")",
+        ":",
+        field("response", $._custom_type_ident),
+        optional($.metadata),
+        ";",
       ),
 
-    _scalar: ($) =>
-      choice($.boolean_constant, $.integer_constant, $.float_constant),
+    // Type System
+    _type_reference: ($) => choice($.scalar_type, $._custom_type_ident),
 
-    json_object: ($) =>
-      seq(
-        "{",
-        repeat(seq($._object_field, ",")),
-        optional($._object_field),
-        "}",
-      ),
+    _type: ($) => choice($._type_reference, $.vector_type, $.array_type),
 
-    _object_field: ($) =>
-      seq(field("key", choice($.ident, $.string_constant)), ":", $.value),
+    vector_type: ($) => seq("[", field("element", $._type_reference), "]"),
 
-    _single_value: ($) => choice($._scalar, $.string_constant),
-
-    value: ($) => choice($._single_value, $.json_object, $.json_array),
-
-    json_array: ($) =>
+    array_type: ($) =>
       seq(
         "[",
-        optional(seq($.value, repeat(seq(",", $.value)), optional(","))),
+        field("element", $._type_reference),
+        ":",
+        field("size", $.integer_constant),
         "]",
       ),
 
-    // file_extension_decl
-    file_extension: ($) => seq("file_extension", $.string_constant, ";"),
+    scalar_type: (_) =>
+      choice(
+        "bool",
+        "string",
+        /u?int(8|16|32|64)?/,
+        /u?byte/,
+        /u?short/,
+        /u?long/,
+        /float(32|64)?/,
+        "double",
+      ),
 
-    // file_identifier_decl
-    file_identifier: ($) => seq("file_identifier", $.string_constant, ";"),
+    // Metadata
+    metadata: ($) => seq("(", commaSep($.attribute), ")"),
 
-    // ' is undocumented but compiles correctly
-    string_constant: ($) => /("[^"]*?"|'[^']*?')/,
+    attribute: ($) =>
+      seq(
+        field("name", $.ident),
+        optional(seq(":", field("value", $._scalar_constant))),
+      ),
 
-    // Empty vector is the only allowed constant.
-    vector_constant: ($) => "[]",
+    // Constants
+    _scalar_constant: ($) =>
+      choice(
+        $.boolean_constant,
+        $.integer_constant,
+        $.float_constant,
+        $.null_constant,
+        $.string_constant,
+      ),
+    vector_constant: (_) => /\[\s*\]/,
 
-    ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    // JSON (FlexBuffers)
+    json_object: ($) => seq("{", commaSep($._object_field), "}"),
+    _json_value: ($) => choice($._scalar_constant, $.json_object, $.json_array),
+    pair: ($) =>
+      seq(
+        field("key", choice($.ident, $.string_constant)),
+        ":",
+        field("value", $._json_value),
+      ),
+    _object_field: ($) => seq($.pair),
+    json_array: ($) => seq("[", commaSep($._json_value), "]"),
 
-    integer_constant: ($) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
+    // Terminals
+    ident: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    float_constant: ($) =>
+    // Right associate here so that going from a name to it's preceding scope is easy.
+    // e.g. in com.foo.bar.Baz, going from bar to com.foo.bar
+    qualified_ident: ($) =>
+      seq(
+        field("scope", choice($.qualified_ident, $.ident)),
+        ".",
+        field("name", $.ident),
+      ),
+
+    _custom_type_ident: ($) => choice($.qualified_ident, $.ident), // user-defined table, enum, etc
+
+    string_constant: (_) =>
+      // These are seq so that ' and " are nodes. This allows editors to treat them as brackets.
+      choice(seq(`'`, /([^'\\]|\\.)*/, `'`), seq(`"`, /([^"\\]|\\.)*/, `"`)),
+
+    integer_constant: (_) => choice(/[-+]?[0-9]+/, /[-+]?0[xX][0-9a-fA-F]+/),
+    float_constant: (_) =>
       choice(
         /[-+]?(([.][0-9]+)|([0-9]+[.][0-9]*)|([0-9]+))([eE][-+]?[0-9]+)?/,
         /[-+]?0[xX](([.][0-9a-fA-F]+)|([0-9a-fA-F]+[.][0-9a-fA-F]*)|([0-9a-fA-F]+))([pP][-+]?[0-9]+)/,
-        /[-+]?(nan|inf|infinity)/,
+        token(prec(1, /[-+]?(nan|inf|infinity)/)),
       ),
+    boolean_constant: (_) => choice("true", "false"),
+    null_constant: (_) => "null",
 
-    boolean_constant: ($) => choice("true", "false"),
-
-    comment: ($) =>
+    comment: (_) =>
       choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")),
   },
 });
