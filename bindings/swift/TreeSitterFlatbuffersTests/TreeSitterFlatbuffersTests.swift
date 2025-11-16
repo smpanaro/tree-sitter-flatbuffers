@@ -7,6 +7,6 @@ final class TreeSitterFlatbuffersTests: XCTestCase {
         let parser = Parser()
         let language = Language(language: tree_sitter_flatbuffers())
         XCTAssertNoThrow(try parser.setLanguage(language),
-                         "Error loading Flatbuffers grammar")
+                         "Error loading FlatBuffers grammar")
     }
 }

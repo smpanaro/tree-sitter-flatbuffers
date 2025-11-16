@@ -1,11 +1,12 @@
 from unittest import TestCase
 
-import tree_sitter, tree_sitter_flatbuffers
+from tree_sitter import Language, Parser
+import tree_sitter_flatbuffers
 
 
 class TestLanguage(TestCase):
     def test_can_load_grammar(self):
         try:
-            tree_sitter.Language(tree_sitter_flatbuffers.language())
+            Parser(Language(tree_sitter_flatbuffers.language()))
         except Exception:
-            self.fail("Error loading Flatbuffers grammar")
+            self.fail("Error loading FlatBuffers grammar")

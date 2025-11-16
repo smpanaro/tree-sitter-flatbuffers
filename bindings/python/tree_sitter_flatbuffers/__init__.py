@@ -1,4 +1,4 @@
-"""Flatbuffers grammar for tree-sitter"""
+"""FlatBuffers grammar for tree-sitter"""
 
 from importlib.resources import files as _files
 
