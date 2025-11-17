@@ -1,5 +1,7 @@
 attribute attr;
 
+namespace com;
+
 table Req {}
 table Res {}
 
@@ -13,4 +15,10 @@ rpc_service Svc {
     Method2(Req): Res (attr: 0x3);
 //                     ^ attribute
 //                           ^ number
+    MethodQualified(com.Req): com.Res;
+//  ^ function
+//                  ^ type
+//                      ^ type
+//                            ^ type
+//                                ^ type
 }

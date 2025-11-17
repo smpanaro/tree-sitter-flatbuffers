@@ -51,10 +51,9 @@
 
 ; RPCs
 (rpc_service (ident) @type)
-(rpc_method
-    name: (ident) @function
-    request: (ident) @type
-    response: (ident) @type)
+(rpc_method name: (ident) @function)
+(rpc_method request: (ident) @type)
+(rpc_method response: (ident) @type)
 
 ; Special
 (file_extension "file_extension" @keyword)
