@@ -68,7 +68,7 @@ enum EnumType : short {
 )
 
 =========================
-ENUMS: attributes
+ENUMS: type attributes
 =========================
 
 enum EnumType : ushort (bit_fields) { A, B, C }
@@ -80,6 +80,22 @@ enum EnumType : ushort (bit_fields) { A, B, C }
         (enum_field name: (ident))
         (enum_field name: (ident))
         (enum_field name: (ident))
+    )
+)
+
+=========================
+ENUMS: value attributes
+=========================
+
+enum EnumType : ushort { A (k: 3), B (required), C (id) }
+
+----
+
+(schema
+    (enum name: (ident) type: (scalar_type)
+        (enum_field name: (ident) (metadata (attribute name: (ident) value: (integer_constant))))
+        (enum_field name: (ident) (metadata (attribute name: (ident))))
+        (enum_field name: (ident) (metadata (attribute name: (ident))))
     )
 )
 
