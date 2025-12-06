@@ -3,10 +3,11 @@ attribute "key";
 
 /// RGB
 // <- comment
-enum Color : byte {
+enum Color : byte (attr) {
 // <- keyword
 //   ^ type
 //           ^ type.builtin
+//                 ^ attribute
     Red = 0,
 //  ^ variant
 //        ^ number

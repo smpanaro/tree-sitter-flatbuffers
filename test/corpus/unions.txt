@@ -75,6 +75,27 @@ union UnionType {
 )
 
 =========================
+UNIONS: attributes
+=========================
+
+union UnionType (attr) {
+    one: TableOne (attr),
+    TableTwo (attr),
+}
+
+----
+
+(schema
+    (union name: (ident) (metadata (attribute name: (ident)))
+        (union_field
+            alias: (ident)
+            type: (ident) (metadata (attribute name: (ident))))
+        (union_field
+            type: (ident) (metadata (attribute name: (ident))))
+    )
+)
+
+=========================
 UNIONS: comments
 =========================
 

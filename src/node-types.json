@@ -523,6 +523,10 @@
       "required": true,
       "types": [
         {
+          "type": "metadata",
+          "named": true
+        },
+        {
           "type": "rpc_method",
           "named": true
         }
@@ -863,6 +867,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "metadata",
+          "named": true
+        }
+      ]
     }
   },
   {

@@ -1,12 +1,16 @@
-struct Vec3 {
+attribute attr;
+struct Vec3 (attr: 3) {
 // <- keyword
 //      ^ type
+//           ^ attribute
+//                 ^ number
     xyz: [int: 3];
 //  ^field
 //       ^ punctuation.bracket
 //         ^ type.builtin
 //             ^ number
-    origin: int;
+    origin: int (attr);
 //  ^field
 //          ^ type.builtin
+//               ^ attribute
 }

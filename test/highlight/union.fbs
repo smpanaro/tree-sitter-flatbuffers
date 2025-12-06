@@ -1,16 +1,20 @@
 namespace com.foo;
+attribute attr;
 table Object {}
 table Right {}
 table Middle {}
 
-union Any {
+union Any (attr) {
 // <- keyword
 //    ^ type
-    left: Object,
+//         ^ attribute
+    left: Object (attr),
 //  ^ variant
 //        ^ type
-    Right,
+//                ^ attribute
+    Right (attr),
 //  ^ type
+//         ^ attribute
     com.foo.Middle,
 //  ^ type
 //      ^ type

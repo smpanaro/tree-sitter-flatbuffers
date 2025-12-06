@@ -42,17 +42,17 @@ rpc_service ServiceType {
 )
 
 =========================
-RPCS: method attribute
+RPCS: attributes
 =========================
 
-rpc_service ServiceType {
+rpc_service ServiceType (custom_attribute) {
   Read(ReadRequestTable):ReadResponseTable (custom_attribute);
 }
 
 ----
 
 (schema
-    (rpc_service name: (ident)
+    (rpc_service name: (ident) (metadata (attribute name: (ident)))
         (rpc_method name: (ident) request: (ident) response: (ident) (metadata (attribute name: (ident))))
     )
 )

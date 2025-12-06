@@ -20,7 +20,7 @@ export default grammar({
     schema: ($) =>
       repeat(
         choice(
-          $.include,
+          $.include, // Relaxation: technically required to come first in the file.
           $.namespace,
           $.custom_attribute,
           $.table,
@@ -99,6 +99,7 @@ export default grammar({
       seq(
         "rpc_service",
         field("name", $.ident),
+        optional($.metadata), // Not in official grammar, but supported.
         "{",
         repeat1($.rpc_method),
         "}",
@@ -140,13 +141,14 @@ export default grammar({
       seq(
         field("name", $.ident),
         optional(seq("=", field("value", $.integer_constant))),
-        optional($.metadata), // Enums can have metadata too
+        optional($.metadata),
       ),
 
     union_field: ($) =>
       seq(
         optional(seq(field("alias", $.ident), ":")),
         field("type", $._custom_type_ident),
+        optional($.metadata),
       ),
 
     rpc_method: ($) =>

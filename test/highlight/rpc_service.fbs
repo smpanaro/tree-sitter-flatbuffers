@@ -5,9 +5,10 @@ namespace com;
 table Req {}
 table Res {}
 
-rpc_service Svc {
+rpc_service Svc (attr) {
 // <- keyword
 //          ^ type
+//               ^ attribute
     Method(Req): Res;
 //  ^ function
 //         ^ type
